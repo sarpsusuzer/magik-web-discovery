@@ -1,0 +1,1638 @@
+<title>MAGIK Web Sitesi Keşfi</title>
+<meta name="description" content="MAGIK Studio web sitesi keşif formu">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@300..800&family=Inter:wght@500;600&display=swap">
+<style>
+/* Layout: split like the magik.studio hero. Forest rail (progress + index) left, paper working column right.
+   Welcome and confirmation are full-bleed forest with the blueprint grid. Single committed look (brand is two-tone). */
+:root {
+  color-scheme: light;
+  /* Magik Design System colors */
+  --forest: #07402B;
+  --forest-deep: #003723;
+  --ink: #003C26;
+  --ink-2: #45705F;          /* ink at ~72% on paper, 5.2:1 */
+  --ink-3: #6F8C80;          /* placeholders, meta */
+  --accent: #13CD89;         /* light green, used on forest only */
+  --mint: #E6FFDD;           /* selected option fill */
+  --paper: #F5F8F3;          /* working surface, green-biased neutral */
+  --field: #FFFFFF;
+  --line: rgba(0, 60, 38, 0.12);
+  --line-strong: rgba(0, 60, 38, 0.28);
+  --on-dark: #FFFFFF;
+  --on-dark-2: rgba(255, 255, 255, 0.66);
+  --on-dark-3: rgba(255, 255, 255, 0.2);
+  --on-dark-4: rgba(255, 255, 255, 0.1);
+  --danger: #B42318;         /* extension: the DS defines no error color */
+  --danger-on-dark: #FFB4A8;
+
+  /* Type */
+  --font: "Afacad Flux", "Inter", system-ui, sans-serif;
+  --font-ui: "Inter", system-ui, sans-serif;
+  --track: -0.01em;
+
+  /* Radius, motion */
+  --r-sm: 8px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur: 220ms;
+  --dur-slow: 400ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.45;
+  letter-spacing: var(--track);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+button, input, textarea { font: inherit; color: inherit; letter-spacing: inherit; }
+h1, h2, h3, p, dl, dd, fieldset { margin: 0; }
+fieldset { border: 0; padding: 0; min-width: 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Buttons (Magik recipes) ---------- */
+.btn {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: var(--track);
+  line-height: 1;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: var(--r-md);
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  background: transparent;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease), transform 140ms var(--ease);
+}
+.btn:active { transform: translateY(1px); }
+.btn svg { width: 16px; height: 16px; flex: none; }
+.btn-solid { background: var(--forest); color: #fff; border-color: var(--forest); }
+.btn-solid:hover { background: var(--forest-deep); }
+.btn-outline { color: var(--ink); border-color: rgba(0, 60, 38, 0.4); }
+.btn-outline:hover { border-color: var(--ink); background: rgba(0, 60, 38, 0.04); }
+.btn-white { background: #fff; color: var(--ink); border-color: #fff; }
+.btn-white:hover { background: #F3F7F2; }
+.btn-ghost-dark { color: var(--on-dark); border-color: rgba(255, 255, 255, 0.5); }
+.btn-ghost-dark:hover { border-color: rgba(255, 255, 255, 0.9); background: rgba(255, 255, 255, 0.05); }
+.btn-text { min-height: 40px; padding: 0 4px; color: inherit; border-radius: var(--r-sm); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: currentColor; }
+.btn[disabled] { opacity: 0.5; cursor: progress; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.paper :focus-visible { outline-color: var(--forest); }
+
+/* ---------- Brand marks ---------- */
+.wordmark { display: block; height: 30px; width: auto; color: #fff; }
+.mark { display: block; height: 28px; width: auto; color: #fff; }
+
+/* ---------- Blueprint grid ---------- */
+.grid-bg {
+  background-image:
+    linear-gradient(to right, var(--on-dark-4) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--on-dark-4) 1px, transparent 1px);
+  background-size: 44px 44px;
+  background-position: -1px -1px;
+}
+
+/* ===================================================================
+   Stage: welcome + confirmation (full-bleed forest)
+   =================================================================== */
+.stage {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--forest);
+  color: var(--on-dark);
+  display: flex;
+  flex-direction: column;
+}
+.stage-nav {
+  height: 79px;
+  padding-inline: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--on-dark-4);
+  flex: none;
+}
+.stage-nav .meta { font-size: 15px; color: var(--on-dark-2); }
+.stage-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.stage-copy {
+  padding: 56px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 640px;
+}
+.eyebrow {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.stage .eyebrow { color: var(--on-dark-2); }
+.display {
+  font-weight: 700;
+  font-size: clamp(44px, 6.4vw, 76px);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.lede { font-size: 20px; line-height: 1.45; color: var(--on-dark-2); max-width: 34em; text-wrap: pretty; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 16px; color: var(--on-dark-2); padding: 0; margin: 0; list-style: none; }
+.facts li { display: flex; align-items: center; gap: 8px; }
+.facts li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.facts strong { color: #fff; font-weight: 600; }
+.cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+
+.stage-aside {
+  border-top: 1px solid var(--on-dark-4);
+  padding: 32px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.toc { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--on-dark-4); max-width: 560px; width: 100%; }
+.toc li {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 12px;
+  align-items: baseline;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--on-dark-4);
+  font-size: 18px;
+}
+.toc .n { font-variant-numeric: tabular-nums; color: var(--on-dark-2); font-size: 15px; }
+.toc .c { color: var(--on-dark-2); font-size: 15px; font-variant-numeric: tabular-nums; }
+.toc-cap { font-size: 15px; color: var(--on-dark-2); margin-bottom: 14px; }
+
+.resume {
+  border: 1px solid var(--on-dark-3);
+  border-radius: var(--r-lg);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.resume-title { font-size: 22px; font-weight: 600; line-height: 1.15; }
+.resume-meta { color: var(--on-dark-2); font-size: 16px; }
+.meter { height: 4px; border-radius: 4px; background: var(--on-dark-4); overflow: hidden; }
+.meter > span { display: block; height: 100%; background: var(--accent); border-radius: inherit; transition: width var(--dur-slow) var(--ease); }
+.confirm-inline { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; font-size: 16px; color: var(--on-dark-2); }
+
+@media (min-width: 960px) {
+  .stage-body { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .stage-copy { padding: 88px 48px 64px 24px; justify-content: center; }
+  .stage-aside { border-top: 0; border-left: 1px solid var(--on-dark-4); padding: 64px 48px; justify-content: center; align-items: flex-start; }
+}
+
+/* Confirmation */
+.done-copy { gap: 32px; }
+.sign { font-size: 22px; line-height: 1.3; }
+.sign span { display: block; color: var(--on-dark-2); }
+.status {
+  border: 1px solid var(--on-dark-3);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 520px;
+  width: 100%;
+}
+.status-row { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 18px; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #F5C26B; flex: none; }
+.status-dot.ok { background: var(--accent); }
+.status p { color: var(--on-dark-2); font-size: 16px; }
+.copy-fallback { width: 100%; min-height: 160px; background: rgba(0, 0, 0, 0.18); color: #fff; border: 1px solid var(--on-dark-3); border-radius: var(--r-sm); padding: 12px; font-size: 14px; }
+
+/* ===================================================================
+   Form shell: rail + main
+   =================================================================== */
+.shell { min-height: 100vh; min-height: 100dvh; display: grid; grid-template-columns: minmax(0, 1fr); }
+
+/* Mobile/tablet top bar */
+.topbar {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  background: var(--forest);
+  color: #fff;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.topbar-step { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.2; }
+.topbar-step b { font-weight: 600; font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar-step span { font-size: 13px; color: var(--on-dark-2); font-variant-numeric: tabular-nums; }
+.topbar .btn { min-height: 40px; padding: 0 14px; }
+.topbar-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--on-dark-4); }
+.topbar-progress span { display: block; height: 100%; background: var(--accent); transition: width var(--dur-slow) var(--ease); }
+
+.rail {
+  background: var(--forest);
+  color: #fff;
+  display: none;
+  flex-direction: column;
+  gap: 28px;
+  padding: 28px 24px 24px;
+}
+.rail.open {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  overflow-y: auto;
+  padding-top: calc(20px + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+}
+.rail-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.rail-close { display: inline-flex; }
+.rail .eyebrow { color: var(--on-dark-2); font-size: 13px; }
+.nav { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.nav button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px;
+  margin-inline: -10px;
+  width: calc(100% + 20px);
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--on-dark-2);
+  text-align: left;
+  cursor: pointer;
+  font-size: 17px;
+  line-height: 1.2;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.nav button:hover:not([disabled]) { background: rgba(255, 255, 255, 0.06); color: #fff; }
+.nav button[disabled] { cursor: default; color: rgba(255, 255, 255, 0.36); }
+.nav .n { font-size: 14px; font-variant-numeric: tabular-nums; }
+.nav [aria-current="step"] { color: #fff; background: rgba(255, 255, 255, 0.1); font-weight: 600; }
+.nav .st { font-size: 12px; display: inline-flex; align-items: center; gap: 6px; color: var(--on-dark-2); }
+.nav .st svg { width: 14px; height: 14px; color: var(--accent); }
+.nav .st.miss { color: var(--danger-on-dark); }
+.nav .st.miss::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.rail-foot { margin-top: auto; display: flex; flex-direction: column; gap: 12px; padding-top: 20px; border-top: 1px solid var(--on-dark-4); }
+.rail-stat { display: flex; justify-content: space-between; align-items: baseline; font-size: 15px; color: var(--on-dark-2); }
+.rail-stat b { color: #fff; font-weight: 600; font-size: 22px; font-variant-numeric: tabular-nums; }
+.save-note { font-size: 13px; color: var(--on-dark-2); line-height: 1.35; display: flex; gap: 8px; align-items: flex-start; }
+.save-note::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-top: 6px; }
+.save-note.warn::before { background: #F5C26B; }
+
+@media (min-width: 1024px) {
+  .shell { grid-template-columns: 320px minmax(0, 1fr); }
+  .topbar { display: none; }
+  .rail, .rail.open {
+    display: flex;
+    position: sticky;
+    inset: auto;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    z-index: auto;
+    padding: 28px 28px 24px;
+  }
+  .rail-close { display: none; }
+}
+
+/* Main column */
+.main { min-width: 0; display: flex; flex-direction: column; background: var(--paper); }
+.content {
+  width: 100%;
+  max-width: 760px;
+  margin-inline: auto;
+  padding: 40px 20px 32px;
+  flex: 1;
+}
+@media (min-width: 720px) { .content { padding: 64px 40px 48px; } }
+.step-enter { animation: enter var(--dur-slow) var(--ease) both; }
+@keyframes enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+.sec-head { display: flex; flex-direction: column; gap: 16px; padding-bottom: 36px; }
+.sec-head .eyebrow { color: var(--ink-2); font-size: 14px; font-variant-numeric: tabular-nums; }
+.sec-title { font-weight: 700; font-size: clamp(36px, 5vw, 54px); line-height: 0.98; letter-spacing: -0.02em; text-wrap: balance; }
+.sec-intro { font-size: 19px; line-height: 1.45; color: var(--ink-2); max-width: 36em; text-wrap: pretty; }
+.legend-note { font-size: 15px; color: var(--ink-2); display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
+
+/* Question blocks */
+.q { display: grid; grid-template-rows: 1fr; transition: grid-template-rows var(--dur-slow) var(--ease), opacity var(--dur) var(--ease); }
+.q > .q-inner { min-height: 0; overflow: hidden; }
+.q.collapsed { grid-template-rows: 0fr; opacity: 0; }
+.q.collapsed > .q-inner { visibility: hidden; transition: visibility 0s linear var(--dur-slow); }
+.q-body { padding-block: 30px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 14px; }
+.q.sub .q-body { border-top: 0; padding-top: 0; padding-left: 20px; position: relative; }
+.q.sub .q-body::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 10px;
+  height: 12px;
+  border-left: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+}
+.q-label {
+  display: block;
+  float: left;
+  width: 100%;
+  padding: 0;
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.25;
+  text-wrap: pretty;
+}
+.q-label + * { clear: both; }
+.q.sub .q-label { font-size: 18px; }
+.q-num { display: block; font-size: 14px; font-weight: 500; color: var(--ink-2); font-variant-numeric: tabular-nums; margin-bottom: 6px; }
+.q-ctx { display: block; font-size: 13px; color: var(--ink-2); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+.tag {
+  display: inline-block;
+  vertical-align: 3px;
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  padding: 5px 8px 5px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.tag-req { background: var(--forest); color: #fff; }
+.tag-opt { color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.q-hint { font-size: 16px; color: var(--ink-2); line-height: 1.4; }
+.q-err { font-size: 15px; color: var(--danger); font-weight: 500; display: none; align-items: center; gap: 8px; }
+.q.invalid .q-err { display: flex; }
+.q-err::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
+
+/* Inputs */
+.input {
+  width: 100%;
+  background: var(--field);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  padding: 13px 16px;
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--ink);
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.input::placeholder { color: var(--ink-3); opacity: 1; }
+.input:hover { border-color: rgba(0, 60, 38, 0.5); }
+.input:focus { outline: none; border-color: var(--forest); box-shadow: inset 0 0 0 1px var(--forest); }
+.input:focus-visible { outline: none; }
+.q.invalid .input { border-color: var(--danger); box-shadow: inset 0 0 0 1px var(--danger); }
+.textarea { resize: vertical; min-height: 104px; display: block; }
+.textarea.short { min-height: 64px; }
+input[type="date"].input { max-width: 260px; min-height: 52px; }
+.field-row { display: flex; gap: 10px; align-items: center; }
+.prefix { font-size: 16px; color: var(--ink-3); }
+
+/* Option tiles */
+.opts { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; }
+.opts-inline { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); max-width: 520px; }
+.opt {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 14px;
+  background: var(--field);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-size: 17px;
+  line-height: 1.3;
+  transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.opt[hidden] { display: none !important; }
+.opt:hover { border-color: rgba(0, 60, 38, 0.55); }
+.opt input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.opt .ind {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border: 1.5px solid rgba(0, 60, 38, 0.55);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.opt .ind::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #fff; transform: scale(0); transition: transform var(--dur) var(--ease); }
+.opt input[type="checkbox"] + .ind { border-radius: 4px; }
+.opt input[type="checkbox"] + .ind::after {
+  width: 9px; height: 5px; border-radius: 0; background: transparent;
+  border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+  transform: translateY(-1px) rotate(-45deg) scale(0);
+}
+.opt:has(input:checked) { background: var(--mint); border-color: var(--forest); box-shadow: inset 0 0 0 1px var(--forest); }
+.opt input:checked + .ind { background: var(--forest); border-color: var(--forest); }
+.opt input:checked + .ind::after { transform: scale(1); }
+.opt input[type="checkbox"]:checked + .ind::after { transform: translateY(-1px) rotate(-45deg) scale(1); }
+.opt:has(input:focus-visible) { outline: 2px solid var(--forest); outline-offset: 2px; }
+.q.invalid .opt { border-color: rgba(180, 35, 24, 0.6); }
+
+.reveal { display: grid; grid-template-rows: 1fr; transition: grid-template-rows var(--dur-slow) var(--ease), opacity var(--dur) var(--ease); }
+.reveal > div { min-height: 0; overflow: hidden; }
+.reveal.collapsed { grid-template-rows: 0fr; opacity: 0; }
+.reveal.collapsed > div { visibility: hidden; transition: visibility 0s linear var(--dur-slow); }
+.reveal .input { margin-top: 4px; }
+
+/* Action bar */
+.actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background: rgba(245, 248, 243, 0.94);
+  border-top: 1px solid var(--line);
+  padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
+}
+@supports (backdrop-filter: blur(8px)) { .actions { backdrop-filter: blur(8px); } }
+.actions-in { max-width: 760px; margin-inline: auto; display: flex; align-items: center; gap: 12px; }
+@media (min-width: 720px) { .actions-in { padding-inline: 20px; } }
+.actions .spacer { flex: 1; min-width: 0; font-size: 14px; color: var(--ink-2); font-variant-numeric: tabular-nums; text-align: center; }
+.actions .msg { color: var(--danger); font-weight: 500; }
+@media (max-width: 480px) {
+  .actions .spacer { display: none; }
+  .actions-in .btn { flex: 1; padding-inline: 14px; }
+  .actions-in .btn.btn-outline { flex: 0 0 auto; }
+}
+
+/* Review */
+.rv-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.rv-summary > div { background: var(--field); padding: 18px 20px; display: flex; flex-direction: column; gap: 2px; }
+.rv-summary b { font-size: 32px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.rv-summary span { font-size: 15px; color: var(--ink-2); }
+.callout {
+  border: 1px solid rgba(180, 35, 24, 0.35);
+  background: #FFF6F4;
+  border-radius: var(--r-md);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.callout h3 { font-size: 18px; font-weight: 600; color: var(--danger); }
+.callout ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.callout button { background: none; border: 0; padding: 0; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; text-align: left; font-size: 16px; }
+.rv { padding-block: 28px; border-top: 1px solid var(--line); }
+.rv-head { display: grid; grid-template-columns: 36px 1fr auto; gap: 12px; align-items: baseline; margin-bottom: 18px; }
+.rv-head .n { font-size: 14px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.rv-head h3 { font-size: 24px; font-weight: 700; line-height: 1.1; }
+.rv-head .cnt { display: block; font-size: 14px; color: var(--ink-2); font-weight: 400; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.rv-head .btn { min-height: 38px; padding: 0 14px; }
+.rv dl { display: flex; flex-direction: column; gap: 16px; padding-left: 48px; }
+.rv dt { font-size: 15px; color: var(--ink-2); line-height: 1.35; }
+.rv dd { font-size: 18px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; margin-top: 2px; }
+.rv dd.missing { color: var(--danger); font-weight: 500; }
+.rv .skipped { padding-left: 48px; margin-top: 14px; font-size: 15px; color: var(--ink-3); }
+@media (max-width: 560px) {
+  .rv dl, .rv .skipped { padding-left: 0; }
+  .rv-head { grid-template-columns: 1fr auto; }
+  .rv-head .n { grid-column: 1 / -1; }
+}
+.agree {
+  margin-top: 12px;
+  padding: 22px;
+  border-radius: var(--r-md);
+  background: var(--field);
+  border: 1px solid var(--line-strong);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.agree .opt { border: 0; padding: 0; background: transparent; box-shadow: none; font-size: 18px; }
+.agree .opt:has(input:checked) { background: transparent; box-shadow: none; }
+.agree .opt .ind { margin-top: 3px; }
+.agree-note { font-size: 15px; color: var(--ink-2); }
+.agree.invalid { border-color: var(--danger); }
+.form-msg { color: var(--danger); font-size: 15px; font-weight: 500; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; transition-delay: 0s !important; }
+}
+</style>
+
+<div id="app" lang="tr" aria-live="off"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* =====================================================================
+     Configuration and integration point
+     ---------------------------------------------------------------------
+     Submissions are emailed through Web3Forms (web3forms.com). The
+     access key routes mail to the inbox it was created for and is safe
+     to ship in the page. build.sh injects it into the deployed copy.
+     With no key the form runs in local mode: answers stay in this
+     browser and the confirmation screen says so plainly.
+     ===================================================================== */
+  var WEB3FORMS_KEY = '';
+  var CONFIG = {
+    submitEndpoint: WEB3FORMS_KEY ? 'https://api.web3forms.com/submit' : null,
+    submitHeaders: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    draftKey: 'magik-discovery:draft:v1',
+    submittedKey: 'magik-discovery:submitted:v1',
+    sessionKey: 'magik-discovery:active',
+    formId: 'magik-website-discovery',
+    formVersion: 1
+  };
+
+  async function submitResponses(payload) {
+    if (!CONFIG.submitEndpoint) return { delivered: false, mode: 'local' };
+    var email = (payload.contact.match(/[^\s,;<>()]+@[^\s,;<>()]+\.[a-z]{2,}/i) || [])[0];
+    var body = {
+      access_key: WEB3FORMS_KEY,
+      subject: 'Web sitesi keşif formu: ' + (payload.company || 'Yeni yanıt'),
+      from_name: 'MAGIK Web Discovery',
+      'Şirket': payload.company,
+      'İletişim kişisi': payload.contact,
+      'Yanıtlar': payload.text,
+      'Ham veri (JSON)': JSON.stringify(payload.answers)
+    };
+    if (email) body.replyto = email;
+    var res = await fetch(CONFIG.submitEndpoint, {
+      method: 'POST',
+      headers: CONFIG.submitHeaders,
+      body: JSON.stringify(body)
+    });
+    var data = await res.json().catch(function () { return {}; });
+    if (!res.ok || data.success === false) throw new Error(data.message || 'HTTP ' + res.status);
+    return { delivered: true, mode: 'remote' };
+  }
+
+  /* =====================================================================
+     Question schema
+     type: text | textarea | url | date | single | multi
+     req: required, opt: explicitly optional, sub: conditional follow-up
+     showIf(answers): visibility rule; options with v:'other' get a
+     "please specify" field stored as <id>__other.
+     ===================================================================== */
+  var OTHER = { v: 'other', l: 'Diğer' };
+  var YNU = [{ v: 'yes', l: 'Evet' }, { v: 'no', l: 'Hayır' }, { v: 'unsure', l: 'Emin değilim' }];
+  var ACTIONS = [
+    { v: 'demo', l: 'Demo talep etmek' },
+    { v: 'trial', l: 'Ücretsiz denemeye başlamak' },
+    { v: 'account', l: 'Hesap oluşturmak' },
+    { v: 'quote', l: 'Teklif istemek' },
+    { v: 'sales', l: 'Satış ekibiyle iletişime geçmek' },
+    { v: 'purchase', l: 'Satın almak' },
+    { v: 'leadform', l: 'Bir lead formunu doldurmak' },
+    { v: 'explore', l: 'Ürünü keşfetmek' },
+    { v: 'content', l: 'Eğitici içerikleri okumak' },
+    OTHER
+  ];
+  var hasSite = function (a) { return a.hasSite !== 'no'; };
+
+  var SECTIONS = [
+    {
+      id: 'business',
+      title: 'İşletmeniz Hakkında',
+      short: 'İşletmeniz',
+      intro: 'Önce sizi tanıyalım. Şirketinizin ne yaptığını ve hangi aşamada olduğunu bilmek, her tasarım kararına doğru bağlamdan başlamamızı sağlar.',
+      questions: [
+        { id: 'company', type: 'text', req: true, label: 'Şirketinizin adı nedir?', placeholder: 'Örn. Atlas Lojistik', autocomplete: 'organization' },
+        { id: 'hasSite', type: 'single', layout: 'inline', label: 'Şu anda bir web siteniz var mı?', options: [{ v: 'yes', l: 'Evet' }, { v: 'no', l: 'Hayır' }] },
+        { id: 'url', type: 'url', sub: true, opt: true, label: 'Web sitenizin adresi nedir?', placeholder: 'ornek.com', showIf: function (a) { return a.hasSite === 'yes'; } },
+        { id: 'what', type: 'textarea', req: true, label: 'Şirketiniz ne yapıyor?', hint: 'Bir arkadaşınıza anlatır gibi yazın. Jargon şart değil.' },
+        { id: 'industry', type: 'text', req: true, label: 'Hangi sektörde faaliyet gösteriyorsunuz?', placeholder: 'Örn. B2B SaaS, sağlık teknolojisi, perakende' },
+        { id: 'stage', type: 'single', req: true, label: 'Şirketiniz hangi aşamada?', options: [
+          { v: 'prelaunch', l: 'Lansman öncesi' },
+          { v: 'early', l: 'Erken aşama girişim' },
+          { v: 'growing', l: 'Büyüyen şirket' },
+          { v: 'established', l: 'Köklü bir işletme' },
+          { v: 'repositioning', l: 'Yeniden konumlanıyor ya da yeni bir pazara giriyor' },
+          OTHER
+        ] }
+      ]
+    },
+    {
+      id: 'goals',
+      title: 'İş Hedefleri',
+      short: 'Hedefler',
+      intro: 'Web sitesi bir araç. Hangi iş sonucuna hizmet edeceğini netleştirdiğimizde sayfa yapısından buton metnine kadar her karar o hedefe göre şekillenir.',
+      questions: [
+        { id: 'primaryGoal', type: 'single', req: true, label: 'Yeni web sitenizin birincil hedefi nedir?', hint: 'En önemli olanı seçin. Diğer hedefleri sonraki sorularda konuşacağız.', options: [
+          { v: 'leads', l: 'Nitelikli potansiyel müşteri kazanmak' },
+          { v: 'demos', l: 'Demo taleplerini artırmak' },
+          { v: 'signups', l: 'Ürün kayıtlarını artırmak' },
+          { v: 'launch', l: 'Bir ürünü tanıtmak ya da lansmanını yapmak' },
+          { v: 'sales', l: 'Doğrudan satışları artırmak' },
+          { v: 'salesTeam', l: 'Satış ekibimizi desteklemek' },
+          { v: 'brand', l: 'Marka bilinirliğini ve güvenilirliği artırmak' },
+          { v: 'gtm', l: 'Yeni bir pazara giriş stratejisini desteklemek' },
+          { v: 'reposition', l: 'Şirketimizi ya da ürünümüzü yeniden konumlandırmak' },
+          { v: 'conversion', l: 'Mevcut sitemizdeki dönüşüm oranlarını iyileştirmek' },
+          OTHER
+        ] },
+        { id: 'goalGtm', type: 'textarea', sub: true, ctx: 'Pazara giriş', label: 'Bu stratejiyi kısaca anlatın. Neler değişiyor?', hint: 'Yeni bir segment, bölge, fiyatlandırma modeli ya da satış kanalı olabilir.', showIf: function (a) { return a.primaryGoal === 'gtm'; } },
+        { id: 'goalCurrentPos', type: 'textarea', sub: true, ctx: 'Yeniden konumlandırma', label: 'Bugün pazarda nasıl algılanıyorsunuz?', showIf: function (a) { return a.primaryGoal === 'reposition'; } },
+        { id: 'goalDesiredPos', type: 'textarea', sub: true, ctx: 'Yeniden konumlandırma', label: 'Nasıl algılanmak istiyorsunuz?', showIf: function (a) { return a.primaryGoal === 'reposition'; } },
+        { id: 'goalCvr', type: 'textarea', sub: true, ctx: 'Dönüşüm', label: 'Hangi dönüşüm noktaları beklentinizin altında kalıyor?', hint: 'Örn. demo formu, fiyatlandırma sayfası, kayıt akışı', showIf: function (a) { return a.primaryGoal === 'conversion'; } },
+        { id: 'goalSignupModel', type: 'single', sub: true, layout: 'inline', ctx: 'Ürün kayıtları', label: 'Ürününüz nasıl satın alınıyor?', options: [
+          { v: 'self', l: 'Self-servis' }, { v: 'assisted', l: 'Satış destekli' }, { v: 'hybrid', l: 'Hibrit' }
+        ], showIf: function (a) { return a.primaryGoal === 'signups'; } },
+        { id: 'goalDemoFlow', type: 'textarea', sub: true, ctx: 'Demo talepleri', label: 'Demolar şu anda nasıl planlanıyor? Bir randevu aracı kullanıyor musunuz?', hint: 'Örn. Calendly, HubSpot Meetings, Chili Piper ya da e-postayla manuel planlama', showIf: function (a) { return a.primaryGoal === 'demos'; } },
+        { id: 'goals12', type: 'textarea', label: 'Önümüzdeki 6–12 ay için en önemli iş hedefleriniz neler?' },
+        { id: 'whyNow', type: 'textarea', label: 'Web sitenizi kurmak ya da yenilemek için neden şimdi doğru zaman?' },
+        { id: 'success', type: 'textarea', label: 'Bu projeyi işiniz için başarılı kılacak şey ne olur?' }
+      ]
+    },
+    {
+      id: 'audience',
+      title: 'Hedef Kitle',
+      short: 'Hedef kitle',
+      intro: 'Sitenin ikna etmesi gereken kişileri ne kadar iyi tanırsak mesajı, kanıtları ve akışı o kadar isabetli kurarız.',
+      questions: [
+        { id: 'icp', type: 'textarea', label: 'İdeal müşteriniz kim?' },
+        { id: 'segments', type: 'textarea', rows: 2, label: 'Hangi sektörleri ya da şirket büyüklüklerini hedefliyorsunuz?' },
+        { id: 'decisionMaker', type: 'text', label: 'Satın alma kararını genellikle kim veriyor?', placeholder: 'Örn. pazarlama direktörü, kurucu, satın alma ekibi' },
+        { id: 'problem', type: 'textarea', label: 'Müşterileriniz sizi keşfettiklerinde hangi sorunu çözmeye çalışıyorlar?' },
+        { id: 'objections', type: 'textarea', label: 'Potansiyel müşterilerin satın almasını engelleyen en büyük itirazlar ya da endişeler neler?' },
+        { id: 'newAudience', type: 'single', layout: 'inline', label: 'Bu web sitesiyle yeni bir kitleyi ya da pazarı mı hedefliyorsunuz?', options: YNU },
+        { id: 'newAudienceDesc', type: 'textarea', sub: true, label: 'Bu yeni kitleyi ya da pazarı anlatın.', showIf: function (a) { return a.newAudience === 'yes'; } }
+      ]
+    },
+    {
+      id: 'positioning',
+      title: 'Konumlandırma ve Mesaj',
+      short: 'Konumlandırma',
+      intro: 'Sizi alternatiflerden ayıran şeyi netleştirmek, sitenin sesini ve sayfadaki bilgi hiyerarşisini belirler.',
+      questions: [
+        { id: 'oneLiner', type: 'textarea', rows: 2, label: 'Ürününüzü ya da hizmetinizi tek cümleyle nasıl anlatırsınız?' },
+        { id: 'different', type: 'textarea', label: 'Sizi rakiplerinizden farklı kılan ne?' },
+        { id: 'whyUs', type: 'textarea', label: 'Müşteriler neden alternatif çözümler yerine sizi seçmeli?' },
+        { id: 'posChange', type: 'single', layout: 'inline', label: 'Bu projeyle birlikte konumlandırmanız ya da mesajınız değişiyor mu?', options: YNU },
+        { id: 'posChangeDesc', type: 'textarea', sub: true, label: 'Ne değişiyor? Bugünkü ve hedeflenen yaklaşımı kısaca anlatın.', showIf: function (a) { return a.posChange === 'yes'; } },
+        { id: 'threeThings', type: 'textarea', rows: 4, label: 'Ziyaretçilerin işiniz hakkında anlaması gereken en önemli üç şey nedir?', hint: 'Her birini ayrı bir satıra yazabilirsiniz.' },
+        { id: 'mustAvoid', type: 'textarea', opt: true, label: 'Kullanmamız ya da kaçınmamız gereken belirli mesajlar, iddialar veya terimler var mı?' }
+      ]
+    },
+    {
+      id: 'gtm',
+      title: 'Pazarlama ve Pazara Giriş',
+      short: 'Pazarlama',
+      intro: 'Trafiğin nereden geldiği, ziyaretçinin siteye hangi beklentiyle girdiğini belirler. LinkedIn reklamından gelen biriyle Google aramasından gelen biri aynı sayfaya ihtiyaç duymaz.',
+      questions: [
+        { id: 'traffic', type: 'multi', exclusive: 'unsure', label: 'Web sitesi trafiğinizin çoğunun nereden gelmesini bekliyorsunuz?', hint: 'Birden fazla seçebilirsiniz.', options: [
+          { v: 'seo', l: 'Organik arama / SEO' },
+          { v: 'paid', l: 'Ücretli reklamlar' },
+          { v: 'social', l: 'LinkedIn ya da diğer sosyal medya' },
+          { v: 'outbound', l: 'Outbound satış' },
+          { v: 'email', l: 'E-posta pazarlaması' },
+          { v: 'referral', l: 'Referans ya da iş ortağı kanalları' },
+          { v: 'plg', l: 'Ürün odaklı büyüme' },
+          { v: 'customers', l: 'Mevcut müşteriler' },
+          { v: 'pr', l: 'PR ya da medya' },
+          { v: 'unsure', l: 'Henüz emin değiliz' },
+          OTHER
+        ] },
+        { id: 'gtmInit', type: 'single', layout: 'inline', label: 'Bu web sitesi daha geniş bir pazarlama ya da pazara giriş girişiminin parçası mı?', options: YNU },
+        { id: 'launchPlans', type: 'textarea', label: 'Bir ürün lansmanı, kampanya, pazar genişlemesi ya da konumlandırma değişikliği planlıyor musunuz?', hint: 'Varsa zamanlamasını da yazın.' },
+        { id: 'salesSupport', type: 'textarea', label: 'Satış ekibinizin, satış sürecinin belirli bir aşamasında web sitesinden desteğe ihtiyacı var mı?', hint: 'Örn. ilk görüşme öncesi güven oluşturmak, teklif sonrası karar vericiyi ikna etmek' },
+        { id: 'landingPages', type: 'single', layout: 'inline', label: 'Belirli ürünler, sektörler ya da kampanyalar için özel açılış sayfalarına ihtiyacınız var mı?', options: YNU },
+        { id: 'landingPagesDesc', type: 'textarea', sub: true, opt: true, rows: 2, label: 'Hangileri için? Kabaca bir liste yeterli.', showIf: function (a) { return a.landingPages === 'yes'; } }
+      ]
+    },
+    {
+      id: 'conversion',
+      title: 'Kullanıcı Yolculuğu ve Dönüşüm',
+      short: 'Dönüşüm',
+      intro: 'Her sayfa ziyaretçiyi tek bir ana eyleme yaklaştırmalı. Bu eylemi ve ona giden yolu birlikte tanımlayalım.',
+      questions: [
+        { id: 'primaryAction', type: 'single', req: true, label: 'Ziyaretçilerin yapmasını istediğiniz birincil eylem nedir?', options: ACTIONS },
+        { id: 'secondaryActions', type: 'multi', opt: true, label: 'Ziyaretçiler başka hangi eylemleri yapabilmeli?', hint: 'Birincil eylem bu listede yer almaz.', options: ACTIONS, exclude: function (a) { return a.primaryAction && a.primaryAction !== 'other' ? [a.primaryAction] : []; } },
+        { id: 'infoNeeded', type: 'textarea', label: 'Ziyaretçiler birincil eylemi yapmadan önce kendilerini rahat hissetmek için hangi bilgilere ihtiyaç duyuyor?', hint: 'Örn. fiyatlandırma, entegrasyonlar, güvenlik, kurulum süresi' },
+        { id: 'proof', type: 'multi', label: 'Güven oluşturmak için hangi kanıtlar işe yarar?', hint: 'Birden fazla seçebilirsiniz.', options: [
+          { v: 'testimonials', l: 'Müşteri yorumları' },
+          { v: 'cases', l: 'Vaka çalışmaları' },
+          { v: 'logos', l: 'Müşteri logoları' },
+          { v: 'demos', l: 'Ürün demoları' },
+          { v: 'roi', l: 'ROI ya da performans verileri' },
+          { v: 'awards', l: 'Sertifikalar ya da ödüller' },
+          { v: 'reviews', l: 'Değerlendirmeler ya da puanlar' },
+          { v: 'team', l: 'Kurucu ya da ekip güvenilirliği' },
+          OTHER
+        ] },
+        { id: 'funnel', type: 'textarea', label: 'Göz önünde bulundurmamız gereken mevcut bir dönüşüm hunisi ya da satış süreciniz var mı?' },
+        { id: 'blockers', type: 'textarea', opt: true, label: 'Ziyaretçilerin harekete geçmesini şu anda ne engelliyor?' }
+      ]
+    },
+    {
+      id: 'current',
+      title: 'Mevcut Site ve Zorluklar',
+      short: 'Mevcut site',
+      intro: function (a) {
+        return a.hasSite === 'no'
+          ? 'Henüz bir web siteniz olmadığını belirttiniz, bu yüzden bu bölüm kısa. Sizi bu karara getiren süreci anlamak istiyoruz.'
+          : 'Neyin işe yaradığını ve neyin yaramadığını bilmek, korunacak olanla değişecek olanı ayırmamızı sağlar.';
+      },
+      questions: [
+        { id: 'likes', type: 'textarea', opt: true, label: 'Mevcut web sitenizde neyi beğeniyorsunuz?', showIf: hasSite },
+        { id: 'notWorking', type: 'textarea', label: 'Neler iyi çalışmıyor?', showIf: hasSite },
+        { id: 'trigger', type: 'textarea', label: 'Web sitesini yenileme ya da oluşturma kararını ne tetikledi?' },
+        { id: 'analytics', type: 'single', label: 'Mevcut siteniz hakkında analitik verileriniz ya da içgörüleriniz var mı?', showIf: hasSite, options: [
+          { v: 'share', l: 'Evet, paylaşabiliriz' },
+          { v: 'review', l: 'Evet, ama önce kendi içimizde incelememiz gerekiyor' },
+          { v: 'no', l: 'Hayır' }
+        ] },
+        { id: 'analyticsFindings', type: 'textarea', sub: true, opt: true, label: 'Paylaşmak istediğiniz önemli bulgular var mı?', hint: 'Örn. en çok ziyaret alan sayfalar, çıkış oranı yüksek sayfalar, dönüşüm oranları', showIf: function (a) { return hasSite(a) && a.analytics === 'share'; } },
+        { id: 'metrics', type: 'multi', sub: true, opt: true, label: 'Şu anda hangi metrikleri takip ediyorsunuz?', options: [
+          { v: 'traffic', l: 'Web sitesi trafiği' },
+          { v: 'cvr', l: 'Dönüşüm oranı' },
+          { v: 'demos', l: 'Demo talepleri' },
+          { v: 'leads', l: 'Potansiyel müşteriler' },
+          { v: 'signups', l: 'Kayıtlar' },
+          { v: 'revenue', l: 'Gelir' },
+          { v: 'engagement', l: 'Etkileşim' },
+          OTHER
+        ], showIf: function (a) { return hasSite(a) && (a.analytics === 'share' || a.analytics === 'review'); } },
+        { id: 'preserve', type: 'textarea', opt: true, label: 'Korunması gereken mevcut sayfalar, özellikler ya da içerikler var mı?', showIf: hasSite }
+      ]
+    },
+    {
+      id: 'scope',
+      title: 'Kapsam ve Gereksinimler',
+      short: 'Kapsam',
+      intro: 'Projenin sınırlarını baştan çizmek, doğru ekibi kurmamızı ve takvimi gerçekçi planlamamızı sağlar.',
+      questions: [
+        { id: 'help', type: 'multi', label: 'Hangi konularda desteğe ihtiyacınız var?', hint: 'Birden fazla seçebilirsiniz.', options: [
+          { v: 'strategy', l: 'Web sitesi stratejisi' },
+          { v: 'ia', l: 'Bilgi mimarisi' },
+          { v: 'ux', l: 'UX ve wireframe’ler' },
+          { v: 'ui', l: 'Web sitesi arayüz tasarımı' },
+          { v: 'copy', l: 'Metin yazarlığı ya da mesaj' },
+          { v: 'brand', l: 'Marka kimliği' },
+          { v: 'framer', l: 'Framer geliştirme' },
+          { v: 'cms', l: 'CMS kurulumu' },
+          { v: 'seo', l: 'SEO temelleri' },
+          { v: 'analytics', l: 'Analitik kurulumu' },
+          { v: 'cro', l: 'Dönüşüm optimizasyonu' },
+          OTHER
+        ] },
+        { id: 'pages', type: 'textarea', opt: true, rows: 2, label: 'Sitede hangi sayfaların olmasını bekliyorsunuz?', hint: 'Örn. Ana sayfa, Ürün, Fiyatlandırma, Hakkımızda, Blog, İletişim' },
+        { id: 'brandSystem', type: 'single', label: 'Mevcut bir marka kimliğiniz ve tasarım sisteminiz var mı?', options: [
+          { v: 'keep', l: 'Evet, olduğu gibi korumak istiyoruz' },
+          { v: 'refine', l: 'Evet, ama iyileştirilmesi gerekiyor' },
+          { v: 'none', l: 'Hayır, oluşturmak için desteğe ihtiyacımız var' }
+        ] },
+        { id: 'assets', type: 'single', label: 'Hazır metin ve görsel içerikleriniz var mı?', options: [
+          { v: 'most', l: 'Evet, içeriğin çoğu hazır' },
+          { v: 'some', l: 'Bir kısmı hazır' },
+          { v: 'none', l: 'Hayır, oluşturmak için desteğe ihtiyacımız var' }
+        ] },
+        { id: 'tech', type: 'textarea', opt: true, label: 'Teknik gereksinimler ya da entegrasyonlar var mı?', hint: 'Örn. HubSpot, Salesforce, Calendly, Stripe, çok dilli yapı' },
+        { id: 'admire', type: 'textarea', opt: true, label: 'Beğendiğiniz web siteleri var mı? Nelerini beğeniyorsunuz?', hint: 'Bağlantıları ve kısa notlarınızı ekleyin.' },
+        { id: 'requirements', type: 'textarea', opt: true, label: 'Erişilebilirlik, yerelleştirme, SEO ya da performans konusunda bilmemiz gereken gereksinimler var mı?' }
+      ]
+    },
+    {
+      id: 'success',
+      title: 'Başarıyı Ölçmek',
+      short: 'Başarı ölçütleri',
+      intro: 'Lansmandan sonra sitenin işe yarayıp yaramadığını konuşabilmek için bugünden ölçülebilir hedefler koymamız gerekiyor.',
+      questions: [
+        { id: 'kpis', type: 'multi', label: 'Bu proje için en önemli KPI’lar hangileri?', hint: 'Birden fazla seçebilirsiniz.', options: [
+          { v: 'leads', l: 'Nitelikli potansiyel müşteriler' },
+          { v: 'demos', l: 'Demo talepleri' },
+          { v: 'signupCvr', l: 'Kayıt dönüşüm oranı' },
+          { v: 'leadToCustomer', l: 'Potansiyel müşteriden müşteriye dönüşüm' },
+          { v: 'revenue', l: 'Satış geliri' },
+          { v: 'organic', l: 'Organik trafik' },
+          { v: 'awareness', l: 'Marka bilinirliği' },
+          { v: 'engagement', l: 'Etkileşim' },
+          { v: 'enablement', l: 'Satış ekibine destek' },
+          OTHER
+        ] },
+        { id: 'baseline', type: 'single', layout: 'inline', label: 'Mevcut temel metrikleriniz var mı?', options: YNU },
+        { id: 'baselineDesc', type: 'textarea', sub: true, opt: true, label: 'Mevcut metriklerinizi ve hedeflediğiniz iyileşmeyi paylaşın.', hint: 'Örn. ayda 40 demo talebi, hedef 70', showIf: function (a) { return a.baseline === 'yes'; } },
+        { id: 'threeMonths', type: 'textarea', label: 'Lansmandan üç ay sonra “Bu site işe yarıyor” demenizi ne sağlar?' }
+      ]
+    },
+    {
+      id: 'timeline',
+      title: 'Takvim ve İş Birliği',
+      short: 'Takvim',
+      intro: 'Son olarak lojistik. Takvimi neyin belirlediğini ve kararları kimin verdiğini bilmek, süreci sürprizsiz yönetmemizi sağlar.',
+      questions: [
+        { id: 'launchMode', type: 'single', layout: 'inline', label: 'Hedeflediğiniz bir lansman tarihi var mı?', options: [
+          { v: 'date', l: 'Belirli bir tarih' }, { v: 'period', l: 'Yaklaşık bir dönem' }, { v: 'tbd', l: 'Henüz belli değil' }
+        ] },
+        { id: 'launchDate', type: 'date', sub: true, label: 'Hedef lansman tarihi', showIf: function (a) { return a.launchMode === 'date'; } },
+        { id: 'launchPeriod', type: 'text', sub: true, label: 'Yaklaşık dönem', placeholder: 'Örn. 2027’nin ilk çeyreği, Mart sonu', showIf: function (a) { return a.launchMode === 'period'; } },
+        { id: 'deadline', type: 'textarea', opt: true, rows: 2, label: 'Takvimi belirleyen belirli bir etkinlik, lansman ya da son tarih var mı?' },
+        { id: 'approvers', type: 'text', label: 'Projeyi incelemek ve onaylamak için kimler dahil olacak?', placeholder: 'Örn. kurucu, pazarlama direktörü, CTO' },
+        { id: 'contact', type: 'text', req: true, label: 'Birincil iletişim kişisi kim olacak?', hint: 'Adını, unvanını ve e-posta adresini yazın.', placeholder: 'Örn. Elif Yılmaz, Pazarlama Direktörü, elif@ornek.com', autocomplete: 'off' },
+        { id: 'anythingElse', type: 'textarea', opt: true, label: 'Başlamadan önce bilmemiz gereken başka bir şey var mı?' }
+      ]
+    }
+  ];
+  var N = SECTIONS.length;
+  var REVIEW = N; // step index of the review screen
+
+  /* =====================================================================
+     State
+     ===================================================================== */
+  var state = {
+    answers: {},
+    step: 'welcome',      // 'welcome' | 0..N-1 | REVIEW | 'done'
+    furthest: -1,         // furthest step index reached
+    visited: [],
+    fromReview: false,
+    confirmed: false,
+    submitting: false,
+    formMsg: '',
+    agreeError: false,
+    submission: null,
+    savedAt: null,
+    storageOk: true,
+    railOpen: false,
+    confirmDiscard: false,
+    copyFallback: false
+  };
+
+  /* ---------- storage ---------- */
+  function store(kind) {
+    try { return kind === 'session' ? window.sessionStorage : window.localStorage; } catch (e) { return null; }
+  }
+  function readJSON(key, kind) {
+    try { var s = store(kind); if (!s) return null; var v = s.getItem(key); return v ? JSON.parse(v) : null; } catch (e) { return null; }
+  }
+  function writeJSON(key, val, kind) {
+    try { var s = store(kind); if (!s) return false; s.setItem(key, JSON.stringify(val)); return true; } catch (e) { return false; }
+  }
+  function removeKey(key, kind) {
+    try { var s = store(kind); if (s) s.removeItem(key); } catch (e) { /* ignore */ }
+  }
+
+  var saveTimer = null;
+  function saveNow() {
+    clearTimeout(saveTimer);
+    saveTimer = null;
+    if (state.step === 'done' || state.step === 'welcome' && !hasAnyAnswer()) return;
+    var ok = writeJSON(CONFIG.draftKey, {
+      v: 1,
+      answers: state.answers,
+      step: state.step,
+      furthest: state.furthest,
+      visited: state.visited,
+      updatedAt: Date.now()
+    });
+    state.storageOk = ok;
+    if (ok) state.savedAt = Date.now();
+    paintSaveNote();
+  }
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveNow, 450);
+  }
+  function hasAnyAnswer() {
+    return Object.keys(state.answers).some(function (k) { return isFilled(state.answers[k]); });
+  }
+
+  /* ---------- answer helpers ---------- */
+  function isFilled(v) {
+    if (Array.isArray(v)) return v.length > 0;
+    return v != null && String(v).trim() !== '';
+  }
+  function visible(q) { return !q.showIf || q.showIf(state.answers); }
+  function answered(q) { return isFilled(state.answers[q.id]); }
+  function urlValid(v) {
+    return /^(https?:\/\/)?([a-z0-9¡-￿-]+\.)+[a-z¡-￿]{2,}(:\d+)?(\/\S*)?$/i.test(String(v).trim());
+  }
+  function visibleQs(i) { return SECTIONS[i].questions.filter(visible); }
+  function missingRequired(i) { return visibleQs(i).filter(function (q) { return q.req && !answered(q); }); }
+  function sectionErrors(i) {
+    var errs = [];
+    visibleQs(i).forEach(function (q) {
+      if (q.req && !answered(q)) errs.push({ q: q, msg: q.type === 'single' ? 'Devam etmek için bir seçenek belirleyin.' : 'Devam etmek için bu soruyu yanıtlayın.' });
+      else if (q.type === 'url' && answered(q) && !urlValid(state.answers[q.id])) errs.push({ q: q, msg: 'Geçerli bir adres girin, örneğin magik.studio' });
+    });
+    return errs;
+  }
+  function totals() {
+    var t = 0, d = 0;
+    SECTIONS.forEach(function (s, i) { visibleQs(i).forEach(function (q) { t++; if (answered(q)) d++; }); });
+    return { total: t, done: d, pct: t ? Math.round(d / t * 100) : 0 };
+  }
+  function optLabel(q, v) {
+    var o = (q.options || []).find(function (x) { return x.v === v; });
+    if (!o) return v;
+    if (v === 'other') {
+      var spec = (state.answers[q.id + '__other'] || '').trim();
+      return spec ? 'Diğer: ' + spec : 'Diğer';
+    }
+    return o.l;
+  }
+  function displayValue(q) {
+    var v = state.answers[q.id];
+    if (!isFilled(v)) return '';
+    if (q.type === 'single') return optLabel(q, v);
+    if (q.type === 'multi') return v.map(function (x) { return optLabel(q, x); }).join(', ');
+    if (q.type === 'date') {
+      var d = new Date(v + 'T00:00:00');
+      return isNaN(d) ? v : d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+    return String(v).trim();
+  }
+
+  /* ---------- format ---------- */
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function clock(ts) { return new Date(ts).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }); }
+  function longDate(ts) {
+    return new Date(ts).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }) + ', ' + clock(ts);
+  }
+  function relDay(ts) {
+    var d = new Date(ts), now = new Date();
+    if (d.toDateString() === now.toDateString()) return 'bugün ' + clock(ts);
+    var y = new Date(now); y.setDate(now.getDate() - 1);
+    if (d.toDateString() === y.toDateString()) return 'dün ' + clock(ts);
+    return longDate(ts);
+  }
+
+  /* ---------- icons ---------- */
+  var ICON = {
+    arrowR: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    arrowL: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+    menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>',
+    close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+  };
+  // Magik wordmark and mark (from the design system assets, recolored via currentColor, viewBox cropped)
+  var WORDMARK = '<svg class="wordmark" viewBox="26 98 1074 274" fill="currentColor" role="img" aria-label="Magik"><path d="M376.765 303V176.676H406.872V191.625C411.364 185.449 416.978 180.817 423.716 177.729C430.453 174.501 437.541 172.887 444.98 172.887C452.7 172.887 459.928 174.571 466.666 177.94C473.403 181.168 479.017 185.87 483.509 192.046C488.421 185.73 494.597 180.957 502.036 177.729C509.475 174.501 517.476 172.887 526.038 172.887C535.161 172.887 543.653 174.992 551.513 179.203C559.373 183.414 565.689 189.519 570.462 197.52C575.374 205.52 577.83 215.135 577.83 226.364V303H544.776V230.996C544.776 223.135 542.46 216.538 537.828 211.205C533.336 205.731 527.231 202.994 519.511 202.994C515.16 202.994 511.019 204.046 507.089 206.152C503.159 208.117 500.001 211.135 497.615 215.205C495.229 219.135 494.036 224.258 494.036 230.574V303H460.77V230.996C460.77 225.662 459.718 220.89 457.612 216.679C455.507 212.328 452.559 208.959 448.77 206.573C444.98 204.187 440.559 202.994 435.506 202.994C431.295 202.994 427.225 203.976 423.294 205.941C419.364 207.906 416.136 210.924 413.61 214.995C411.224 219.065 410.03 224.258 410.03 230.574V303H376.765ZM659.403 305.948C650.7 305.948 642.489 304.263 634.769 300.895C627.19 297.386 620.523 292.613 614.768 286.578C609.014 280.542 604.452 273.524 601.083 265.524C597.855 257.523 596.241 248.962 596.241 239.838C596.241 230.715 597.855 222.153 601.083 214.152C604.452 206.152 609.014 199.134 614.768 193.098C620.523 187.063 627.19 182.361 634.769 178.992C642.489 175.483 650.7 173.729 659.403 173.729C667.684 173.729 675.263 175.203 682.141 178.15C689.159 181.098 695.194 185.168 700.247 190.361V176.676H729.302V303H700.247V289.315C695.194 294.508 689.159 298.579 682.141 301.526C675.263 304.474 667.684 305.948 659.403 305.948ZM663.403 276.683C670.14 276.683 676.176 274.998 681.509 271.63C686.983 268.261 691.334 263.84 694.563 258.366C697.791 252.751 699.405 246.575 699.405 239.838C699.405 233.101 697.791 226.995 694.563 221.521C691.334 215.907 686.983 211.415 681.509 208.047C676.176 204.678 670.21 202.994 663.613 202.994C656.876 202.994 650.77 204.678 645.296 208.047C639.963 211.415 635.682 215.907 632.454 221.521C629.225 226.995 627.611 233.101 627.611 239.838C627.611 246.575 629.225 252.751 632.454 258.366C635.682 263.84 639.963 268.261 645.296 271.63C650.77 274.998 656.806 276.683 663.403 276.683ZM811.394 369.952C804.797 369.952 798.481 369.32 792.445 368.057C786.41 366.793 780.725 364.899 775.391 362.372C770.058 359.986 765.286 357.179 761.075 353.951L769.286 320.475C773.637 326.51 779.392 331.423 786.55 335.213C793.849 339.002 802.06 340.897 811.183 340.897C820.166 340.897 827.816 339.143 834.132 335.634C840.448 332.125 845.291 327.282 848.659 321.106C852.028 315.071 853.712 308.053 853.712 300.052V289.525C848.8 294.578 842.834 298.579 835.816 301.526C828.939 304.474 821.429 305.948 813.289 305.948C804.586 305.948 796.375 304.263 788.655 300.895C781.076 297.386 774.409 292.613 768.654 286.578C762.899 280.542 758.338 273.524 754.969 265.524C751.741 257.523 750.127 248.962 750.127 239.838C750.127 230.715 751.741 222.153 754.969 214.152C758.338 206.152 762.899 199.134 768.654 193.098C774.409 187.063 781.076 182.361 788.655 178.992C796.375 175.483 804.586 173.729 813.289 173.729C821.57 173.729 829.149 175.203 836.027 178.15C843.045 181.098 849.08 185.168 854.133 190.361V176.676H883.188V304.263C883.188 318.018 879.819 329.809 873.082 339.634C866.485 349.459 857.712 356.968 846.764 362.162C835.816 367.355 824.026 369.952 811.394 369.952ZM817.289 276.683C824.026 276.683 830.061 274.998 835.395 271.63C840.869 268.261 845.22 263.84 848.449 258.366C851.677 252.751 853.291 246.575 853.291 239.838C853.291 233.101 851.677 226.995 848.449 221.521C845.22 215.907 840.869 211.415 835.395 208.047C830.061 204.678 824.096 202.994 817.499 202.994C810.762 202.994 804.656 204.678 799.182 208.047C793.849 211.415 789.568 215.907 786.339 221.521C783.111 226.995 781.497 233.101 781.497 239.838C781.497 246.575 783.111 252.751 786.339 258.366C789.568 263.84 793.849 268.261 799.182 271.63C804.656 274.998 810.692 276.683 817.289 276.683ZM911.381 303V176.676H944.647V303H911.381ZM928.014 157.307C924.505 157.307 921.347 156.465 918.54 154.78C915.873 153.096 913.697 150.85 912.013 148.043C910.329 145.236 909.487 142.148 909.487 138.779C909.487 135.13 910.329 131.972 912.013 129.305C913.697 126.498 915.943 124.322 918.75 122.778C921.558 121.094 924.645 120.252 928.014 120.252C931.663 120.252 934.822 121.094 937.488 122.778C940.296 124.322 942.471 126.498 944.015 129.305C945.699 131.972 946.542 135.13 946.542 138.779C946.542 142.288 945.699 145.446 944.015 148.254C942.471 150.92 940.296 153.096 937.488 154.78C934.822 156.465 931.663 157.307 928.014 157.307ZM1056.35 303L1004.77 233.522L1047.3 176.676H1083.51L1041.61 230.785L1096.14 303H1056.35ZM972.768 303V100.882H1006.03V303H972.768Z"/><path d="M148.846 330.552L55.0477 236.754L83.8735 207.928L92.7195 216.774C92.3128 209.25 93.4821 202.183 96.2274 195.574C98.8711 188.863 102.786 182.915 107.971 177.729C113.055 172.645 118.902 168.833 125.511 166.291C132.018 163.647 138.729 162.63 145.643 163.24C145.541 155.614 147.067 148.293 150.219 141.278C153.472 134.16 158.048 127.653 163.945 121.755C170.554 115.146 178.282 110.469 187.128 107.724C195.974 104.978 205.176 104.724 214.734 106.961C224.291 109.198 233.341 114.587 241.882 123.128L299.076 180.322L265.675 213.724L212.598 160.647C208.633 156.682 204.21 154.496 199.329 154.089C194.347 153.581 189.924 155.258 186.06 159.122C183.823 161.359 182.298 164.003 181.485 167.053C180.57 170.002 180.57 173.052 181.485 176.204C182.4 179.356 184.383 182.457 187.433 185.508L240.662 238.736L207.26 272.138L154.184 219.062C151.541 216.418 148.643 214.537 145.491 213.419C142.339 212.3 139.187 212.097 136.035 212.808C132.984 213.419 130.137 215.045 127.494 217.689C125.358 219.824 123.884 222.417 123.071 225.467C122.155 228.416 122.155 231.466 123.071 234.618C123.986 237.771 125.968 240.872 129.019 243.922L182.247 297.151L148.846 330.552Z"/><path d="M59.7655 240.696C53.8278 236.738 38.0869 218.455 34.3248 209.609C30.6644 200.865 28.7325 191.917 28.5292 182.766C28.4275 173.513 30.0543 164.565 33.4097 155.923C36.9685 147.28 42.2558 139.451 49.2716 132.435C56.2874 125.419 64.0658 120.183 72.6068 116.726C81.3511 113.269 90.3497 111.591 99.6024 111.693C108.855 111.794 117.854 113.675 126.598 117.336C135.342 120.996 143.324 126.436 150.543 133.655C156.644 139.756 161.525 146.467 165.185 153.787C168.845 161.108 171.133 168.683 172.048 176.513L132.394 200.305C133.411 194.001 133.156 187.85 131.631 181.851C130.106 175.852 127.106 170.615 122.633 166.141C118.769 162.278 114.397 159.634 109.516 158.21C104.737 156.889 100.009 156.838 95.3319 158.058C90.6547 159.278 86.3842 161.82 82.5204 165.684C78.7583 169.446 76.2163 173.716 74.8945 178.495C73.7761 183.274 73.8777 188.053 75.1996 192.832C76.7247 197.611 79.4192 201.932 83.283 205.796C87.9602 210.473 93.2983 213.574 99.2973 215.1C105.296 216.625 111.448 216.879 117.752 215.862L93.9593 255.517C86.13 254.602 78.5041 252.263 71.0816 248.501C63.7607 244.841 65.8662 246.797 59.7655 240.696Z"/></svg>';
+  var MARK = '<svg class="mark" viewBox="120 200 700 590" fill="currentColor" role="img" aria-label="Magik"><path d="M429.439 778.395L191.583 540.539L264.68 467.442L287.112 489.874C286.081 470.794 289.046 452.874 296.007 436.115C302.711 419.097 312.638 404.014 325.788 390.864C338.68 377.972 353.505 368.303 370.265 361.857C386.766 355.153 403.784 352.575 421.317 354.122C421.059 334.784 424.927 316.22 432.92 298.429C441.17 280.38 452.773 263.878 467.728 248.924C484.487 232.164 504.083 220.304 526.515 213.342C548.947 206.38 572.281 205.736 596.518 211.408C620.755 217.081 643.703 230.746 665.361 252.405L810.395 397.439L725.695 482.139L591.103 347.547C581.048 337.491 569.832 331.948 557.456 330.916C544.821 329.627 533.605 333.882 523.808 343.679C518.135 349.352 514.268 356.056 512.205 363.791C509.884 371.268 509.884 379.003 512.205 386.996C514.525 394.989 519.553 402.853 527.288 410.589L662.267 545.567L577.567 630.267L442.975 495.675C436.271 488.971 428.923 484.201 420.93 481.365C412.937 478.529 404.944 478.013 396.951 479.818C389.216 481.365 381.996 485.491 375.293 492.194C369.878 497.609 366.139 504.184 364.077 511.919C361.756 519.396 361.756 527.132 364.077 535.124C366.397 543.117 371.425 550.982 379.16 558.717L514.139 693.695L429.439 778.395Z"/><path d="M203.57 550.528C188.513 540.49 148.597 494.128 139.057 471.696C129.775 449.522 124.876 426.832 124.361 403.627C124.103 380.164 128.228 357.474 136.737 335.557C145.761 313.641 159.169 293.788 176.96 275.997C194.75 258.206 214.475 244.927 236.134 236.161C258.308 227.394 281.126 223.14 304.59 223.398C328.053 223.656 350.872 228.426 373.046 237.708C395.22 246.99 415.46 260.784 433.767 279.091C449.237 294.561 461.613 311.579 470.896 330.143C480.178 348.707 485.979 367.916 488.3 387.77L387.743 448.104C390.321 432.118 389.676 416.519 385.809 401.306C381.941 386.094 374.335 372.815 362.99 361.47C353.192 351.672 342.105 344.969 329.729 341.359C317.611 338.007 305.621 337.878 293.76 340.972C281.9 344.066 271.071 350.512 261.273 360.31C251.733 369.85 245.287 380.679 241.935 392.798C239.099 404.916 239.357 417.034 242.708 429.153C246.576 441.271 253.409 452.229 263.207 462.027C275.067 473.888 288.604 481.752 303.816 485.619C319.029 489.487 334.628 490.132 350.614 487.553L290.28 588.11C270.426 585.79 251.088 579.859 232.266 570.319C213.702 561.037 219.041 565.999 203.57 550.528Z"/></svg>';
+
+  /* =====================================================================
+     Rendering
+     ===================================================================== */
+  var app = document.getElementById('app');
+
+  function render(opts) {
+    opts = opts || {};
+    if (state.step === 'welcome') app.innerHTML = welcomeHTML();
+    else if (state.step === 'done') app.innerHTML = doneHTML();
+    else app.innerHTML = shellHTML();
+    if (typeof state.step === 'number' && state.step < N) {
+      syncVisibility(false);
+      app.querySelectorAll('textarea').forEach(autosize);
+    }
+    if (opts.scroll !== false) window.scrollTo(0, 0);
+    if (opts.focusHeading) {
+      var h = app.querySelector('[data-focus-target]');
+      if (h) h.focus({ preventScroll: true });
+    }
+  }
+
+  /* ---------- welcome ---------- */
+  function welcomeHTML() {
+    var draft = readJSON(CONFIG.draftKey);
+    var resume = '';
+    if (draft && draft.answers && Object.keys(draft.answers).length) {
+      var prev = state.answers; state.answers = draft.answers;
+      var t = totals(); state.answers = prev;
+      var where = draft.step === REVIEW ? 'Gözden geçirme adımı' : (typeof draft.step === 'number' ? 'Bölüm ' + pad(draft.step + 1) + ', ' + SECTIONS[draft.step].title : 'Başlangıç');
+      resume = '<div class="resume" role="region" aria-label="Kayıtlı taslak">' +
+        '<div><p class="resume-title">Kaldığınız yerden devam edin</p>' +
+        '<p class="resume-meta">' + esc(where) + ' · son kayıt ' + esc(relDay(draft.updatedAt)) + '</p></div>' +
+        '<div class="meter" aria-hidden="true"><span style="width:' + t.pct + '%"></span></div>' +
+        '<p class="resume-meta">' + t.done + ' / ' + t.total + ' soru yanıtlandı</p>' +
+        (state.confirmDiscard
+          ? '<div class="confirm-inline"><span>Taslak bu cihazdan silinecek.</span><button class="btn btn-white" data-act="discard-yes" type="button">Taslağı sil</button><button class="btn btn-text" data-act="discard-no" type="button" style="color:#fff">Vazgeç</button></div>'
+          : '<div class="cta-row"><button class="btn btn-white" data-act="resume" type="button">Devam et ' + ICON.arrowR + '</button><button class="btn btn-text" style="color:#fff" data-act="discard" type="button">Baştan başla</button></div>') +
+        '</div>';
+    }
+    var toc = SECTIONS.map(function (s, i) {
+      var c = s.questions.filter(function (q) { return !q.sub; }).length;
+      return '<li><span class="n">' + pad(i + 1) + '</span><span>' + esc(s.title) + '</span><span class="c">' + c + ' soru</span></li>';
+    }).join('');
+
+    return '<div class="stage">' +
+      '<header class="stage-nav">' + WORDMARK + '<span class="meta">magik.studio</span></header>' +
+      '<div class="stage-body">' +
+        '<section class="stage-copy step-enter" aria-labelledby="w-title">' +
+          '<p class="eyebrow">MAGIK Studio / Web sitesi keşfi</p>' +
+          '<h1 class="display" id="w-title" tabindex="-1" data-focus-target>İşinizi ileri taşıyacak bir web sitesi kuralım.</h1>' +
+          '<p class="lede">Tasarıma başlamadan önce işinizi, kitlenizi ve sizin için başarının neye benzediğini anlamak istiyoruz. Bu kısa form, web siteniz için doğru yönü ortaya çıkarmamıza yardımcı olacak.</p>' +
+          '<ul class="facts"><li>Tahmini süre <strong>8–12 dakika</strong></li><li><strong>10</strong> bölüm</li><li>Yanıtlarınız bu cihazda otomatik kaydedilir</li></ul>' +
+          (resume || '<div class="cta-row"><button class="btn btn-white" data-act="start" type="button">Hadi başlayalım ' + ICON.arrowR + '</button></div>') +
+        '</section>' +
+        '<aside class="stage-aside grid-bg" aria-label="Formun bölümleri">' +
+          '<p class="toc-cap">Neler soracağız</p>' +
+          '<ol class="toc">' + toc + '</ol>' +
+        '</aside>' +
+      '</div></div>';
+  }
+
+  /* ---------- confirmation ---------- */
+  function doneHTML() {
+    var sub = state.submission || {};
+    var delivered = sub.delivered;
+    var status = delivered
+      ? '<div class="status-row"><span class="status-dot ok" aria-hidden="true"></span>MAGIK Studio’ya iletildi</div>' +
+        '<p>' + esc(longDate(sub.submittedAt)) + ' tarihinde gönderildi. Bu tarayıcıda da bir kopyası saklanıyor.</p>'
+      : '<div class="status-row"><span class="status-dot" aria-hidden="true"></span>Yanıtlarınız bu cihazda kayıtlı</div>' +
+        '<p>Bu form henüz bir gönderim sunucusuna bağlı değil, bu yüzden yanıtlarınız MAGIK Studio’ya otomatik olarak iletilmedi. Bize ulaşması için yanıtlarınızı kopyalayıp e-postayla ya da mesajla paylaşın.</p>';
+    var copy = '<div class="cta-row"><button class="btn ' + (delivered ? 'btn-ghost-dark' : 'btn-white') + '" data-act="copy" type="button">Yanıtları kopyala</button>' +
+      '<span class="resume-meta" id="copy-note" role="status"></span></div>' +
+      (state.copyFallback ? '<label class="sr-only" for="copy-area">Yanıtların metni</label><textarea id="copy-area" class="copy-fallback" readonly>' + esc(answersText()) + '</textarea>' : '');
+
+    return '<div class="stage">' +
+      '<header class="stage-nav">' + WORDMARK + '<span class="meta">magik.studio</span></header>' +
+      '<div class="stage-body">' +
+        '<section class="stage-copy done-copy step-enter" aria-labelledby="d-title">' +
+          '<p class="eyebrow">' + (delivered ? 'Form gönderildi' : 'Form tamamlandı') + '</p>' +
+          '<h1 class="display" id="d-title" tabindex="-1" data-focus-target>Detayları paylaştığınız için teşekkürler.</h1>' +
+          '<p class="lede">Yanıtlarınız hedeflerinizi anlamamıza ve web siteniz için doğru yönü belirlememize yardımcı olacak. Bir sonraki görüşmemizden önce yanıtlarınızı inceleyeceğiz.</p>' +
+          '<p class="sign">Görüşmek üzere,<span>MAGIK Studio</span></p>' +
+        '</section>' +
+        '<aside class="stage-aside grid-bg" aria-label="Gönderim durumu">' +
+          '<div class="status">' + status + copy + '</div>' +
+          '<div class="cta-row" style="margin-top:20px"><button class="btn btn-text" style="color:#fff" data-act="new" type="button">Yeni bir form başlat</button></div>' +
+        '</aside>' +
+      '</div></div>';
+  }
+
+  /* ---------- form shell ---------- */
+  function shellHTML() {
+    var isReview = state.step === REVIEW;
+    var title = isReview ? 'Gözden geçir' : SECTIONS[state.step].title;
+    var stepNo = isReview ? 'Son adım' : 'Bölüm ' + pad(state.step + 1) + ' / ' + N;
+    var pos = isReview ? 100 : Math.round((state.step + 1) / (N + 1) * 100);
+    return '<div class="shell">' +
+      '<header class="topbar">' + MARK +
+        '<div class="topbar-step"><span>' + stepNo + '</span><b>' + esc(title) + '</b></div>' +
+        '<button class="btn btn-ghost-dark" type="button" data-act="rail-open" aria-expanded="' + state.railOpen + '" aria-controls="rail">' + ICON.menu + 'Bölümler</button>' +
+        '<div class="topbar-progress" aria-hidden="true"><span style="width:' + pos + '%"></span></div>' +
+      '</header>' +
+      '<aside class="rail' + (state.railOpen ? ' open' : '') + '" id="rail" aria-label="Form ilerlemesi">' + railHTML() + '</aside>' +
+      '<main class="main paper" id="main">' +
+        '<div class="content step-enter">' + (isReview ? reviewHTML() : sectionHTML(state.step)) + '</div>' +
+        actionsHTML() +
+      '</main>' +
+    '</div>';
+  }
+
+  function railHTML() {
+    var t = totals();
+    var items = SECTIONS.map(function (s, i) {
+      var current = state.step === i;
+      var reachable = i <= Math.max(state.furthest, 0);
+      var st = '';
+      if (!current && state.visited.indexOf(i) > -1) {
+        st = missingRequired(i).length ? '<span class="st miss">eksik</span>' : '<span class="st">' + ICON.check + '<span class="sr-only">tamamlandı</span></span>';
+      }
+      return '<li><button type="button" data-goto="' + i + '"' + (current ? ' aria-current="step"' : '') + (reachable ? '' : ' disabled') + '>' +
+        '<span class="n">' + pad(i + 1) + '</span><span>' + esc(s.title) + '</span>' + st + '</button></li>';
+    }).join('');
+    var reviewReach = state.furthest >= REVIEW;
+    items += '<li><button type="button" data-goto="' + REVIEW + '"' + (state.step === REVIEW ? ' aria-current="step"' : '') + (reviewReach ? '' : ' disabled') + '>' +
+      '<span class="n">' + ICON.check.replace('<svg', '<svg width="14" height="14"') + '</span><span>Gözden geçir ve gönder</span></button></li>';
+
+    return '<div class="rail-head">' + WORDMARK +
+        '<button class="btn btn-ghost-dark rail-close" type="button" data-act="rail-close">' + ICON.close + 'Kapat</button></div>' +
+      '<p class="eyebrow">Web sitesi keşfi</p>' +
+      '<ol class="nav">' + items + '</ol>' +
+      '<div class="rail-foot">' +
+        '<div class="rail-stat"><span>Tamamlanan</span><b id="pct">%' + t.pct + '</b></div>' +
+        '<div class="meter" aria-hidden="true"><span id="pct-bar" style="width:' + t.pct + '%"></span></div>' +
+        '<p class="save-note' + (state.storageOk ? '' : ' warn') + '" id="save-note" role="status">' + saveNoteText() + '</p>' +
+      '</div>';
+  }
+
+  function saveNoteText() {
+    if (!state.storageOk) return 'Bu tarayıcı taslak kaydetmeye izin vermiyor. Sayfayı kapatırsanız yanıtlarınız kaybolur.';
+    if (state.savedAt) return 'Taslak bu cihazda kaydedildi · ' + clock(state.savedAt) + '. Henüz gönderilmedi.';
+    return 'Yanıtlarınız bu cihazda otomatik kaydedilir. Gönderene kadar kimseyle paylaşılmaz.';
+  }
+  function paintSaveNote() {
+    var el = document.getElementById('save-note');
+    if (!el) return;
+    el.textContent = saveNoteText();
+    el.classList.toggle('warn', !state.storageOk);
+  }
+  function paintProgress() {
+    var t = totals();
+    var p = document.getElementById('pct'), b = document.getElementById('pct-bar');
+    if (p) p.textContent = '%' + t.pct;
+    if (b) b.style.width = t.pct + '%';
+  }
+
+  function sectionHTML(i) {
+    var s = SECTIONS[i];
+    var intro = typeof s.intro === 'function' ? s.intro(state.answers) : s.intro;
+    var hasReq = s.questions.some(function (q) { return q.req; });
+    var n = 0;
+    var qs = s.questions.map(function (q) {
+      var num = '';
+      if (!q.sub && visible(q)) { n++; num = (i + 1) + '.' + n; }
+      return questionHTML(q, num);
+    }).join('');
+    return '<header class="sec-head">' +
+        '<p class="eyebrow">Bölüm ' + pad(i + 1) + ' / ' + N + '</p>' +
+        '<h1 class="sec-title" tabindex="-1" data-focus-target>' + esc(s.title) + '</h1>' +
+        '<p class="sec-intro">' + esc(intro) + '</p>' +
+        '<p class="legend-note">' + (hasReq ? '<span><span class="tag tag-req" style="margin-left:0">Zorunlu</span> olarak işaretli sorular dışındakileri atlayabilirsiniz.</span>' : '<span>Bu bölümde zorunlu soru yok. Yanıtlayabildiklerinizi yanıtlayın.</span>') + '</p>' +
+      '</header>' +
+      '<div class="qs">' + qs + '</div>';
+  }
+
+  function questionHTML(q, num) {
+    var a = state.answers;
+    var hintId = q.hint ? 'h-' + q.id : '';
+    var errId = 'e-' + q.id;
+    var described = [hintId, errId].filter(Boolean).join(' ');
+    var tag = q.req ? '<span class="tag tag-req">Zorunlu</span>' : (q.opt ? '<span class="tag tag-opt">İsteğe bağlı</span>' : '');
+    var pre = num ? '<span class="q-num">' + num + '</span>' : (q.ctx ? '<span class="q-ctx">' + esc(q.ctx) + '</span>' : '');
+    var labelInner = pre + esc(q.label) + tag;
+    var hint = q.hint ? '<p class="q-hint" id="' + hintId + '">' + esc(q.hint) + '</p>' : '';
+    var err = '<p class="q-err" id="' + errId + '"></p>';
+    var cls = 'q' + (q.sub ? ' sub' : '');
+    var body;
+
+    if (q.type === 'single' || q.type === 'multi') {
+      var multi = q.type === 'multi';
+      var cur = a[q.id];
+      var opts = q.options.map(function (o) {
+        var checked = multi ? (Array.isArray(cur) && cur.indexOf(o.v) > -1) : cur === o.v;
+        return '<label class="opt" data-v="' + o.v + '"><input type="' + (multi ? 'checkbox' : 'radio') + '" name="' + q.id + '" id="' + q.id + '--' + o.v + '" value="' + o.v + '"' + (checked ? ' checked' : '') + (q.req && !multi ? ' aria-required="true"' : '') + '><span class="ind" aria-hidden="true"></span><span>' + esc(o.l) + '</span></label>';
+      }).join('');
+      var other = q.options.some(function (o) { return o.v === 'other'; })
+        ? '<div class="reveal" data-other="' + q.id + '"><div><label class="sr-only" for="' + q.id + '__other">Diğer seçeneğini belirtin</label><input class="input" type="text" id="' + q.id + '__other" data-key="' + q.id + '__other" value="' + esc(a[q.id + '__other'] || '') + '" placeholder="Lütfen belirtin" autocomplete="off"></div></div>'
+        : '';
+      body = '<fieldset aria-describedby="' + described + '"' + '><legend class="q-label">' + labelInner + '</legend>' +
+        '<div class="q-stack" style="display:flex;flex-direction:column;gap:14px">' + hint +
+        '<div class="opts' + (q.layout === 'inline' ? ' opts-inline' : '') + '">' + opts + '</div>' + other + err + '</div></fieldset>';
+    } else {
+      var common = ' id="' + q.id + '" data-key="' + q.id + '" aria-describedby="' + described + '"' + (q.req ? ' aria-required="true"' : '');
+      var field;
+      var val = esc(a[q.id] || '');
+      if (q.type === 'textarea') {
+        field = '<textarea class="input textarea' + (q.rows && q.rows <= 2 ? ' short' : '') + '"' + common + ' rows="' + (q.rows || 3) + '">' + val + '</textarea>';
+      } else if (q.type === 'date') {
+        field = '<input class="input" type="date"' + common + ' value="' + val + '">';
+      } else if (q.type === 'url') {
+        field = '<input class="input" type="url" inputmode="url" spellcheck="false" autocapitalize="off"' + common + ' value="' + val + '" placeholder="' + esc(q.placeholder || '') + '" autocomplete="url">';
+      } else {
+        field = '<input class="input" type="text"' + common + ' value="' + val + '" placeholder="' + esc(q.placeholder || '') + '" autocomplete="' + (q.autocomplete || 'off') + '">';
+      }
+      body = '<label class="q-label" for="' + q.id + '">' + labelInner + '</label>' + hint + field + err;
+    }
+    return '<div class="' + cls + '" data-q="' + q.id + '"><div class="q-inner"><div class="q-body">' + body + '</div></div></div>';
+  }
+
+  function actionsHTML() {
+    var isReview = state.step === REVIEW;
+    var back = '<button class="btn btn-outline" type="button" data-act="back">' + ICON.arrowL + '<span>Geri</span></button>';
+    var mid = '<span class="spacer" id="action-msg" role="status">' + esc(state.formMsg || (isReview ? '' : 'Bölüm ' + (state.step + 1) + ' / ' + N)) + '</span>';
+    var next;
+    if (isReview) {
+      next = '<button class="btn btn-solid" type="button" data-act="submit"' + (state.submitting ? ' disabled' : '') + '>' + (state.submitting ? 'Gönderiliyor…' : 'Formu gönder') + '</button>';
+    } else if (state.fromReview) {
+      next = '<button class="btn btn-solid" type="button" data-act="next">Gözden geçirmeye dön ' + ICON.arrowR + '</button>';
+    } else {
+      next = '<button class="btn btn-solid" type="button" data-act="next">' + (state.step === N - 1 ? 'Gözden geçir' : 'Devam et') + ' ' + ICON.arrowR + '</button>';
+    }
+    return '<div class="actions"><div class="actions-in">' + back + mid + next + '</div></div>';
+  }
+
+  /* ---------- review ---------- */
+  function reviewHTML() {
+    var t = totals();
+    var missing = [];
+    SECTIONS.forEach(function (s, i) { missingRequired(i).forEach(function (q) { missing.push({ i: i, q: q }); }); });
+
+    var secs = SECTIONS.map(function (s, i) {
+      var qs = visibleQs(i);
+      var done = qs.filter(answered);
+      var skipped = qs.length - done.length;
+      var items = qs.map(function (q) {
+        if (answered(q)) return '<div><dt>' + esc(q.label) + '</dt><dd>' + esc(displayValue(q)) + '</dd></div>';
+        if (q.req) return '<div><dt>' + esc(q.label) + '</dt><dd class="missing">Zorunlu, henüz yanıtlanmadı</dd></div>';
+        return '';
+      }).join('');
+      return '<section class="rv" aria-labelledby="rv-' + i + '">' +
+        '<div class="rv-head"><span class="n">' + pad(i + 1) + '</span>' +
+          '<h3 id="rv-' + i + '">' + esc(s.title) + '<span class="cnt">' + done.length + ' / ' + qs.length + ' yanıtlandı</span></h3>' +
+          '<button class="btn btn-outline" type="button" data-edit="' + i + '">Düzenle<span class="sr-only">: ' + esc(s.title) + '</span></button></div>' +
+        (items ? '<dl>' + items + '</dl>' : '<p class="skipped" style="margin-top:0">Bu bölümde henüz yanıt yok.</p>') +
+        (skipped && items ? '<p class="skipped">' + skipped + ' soru boş bırakıldı.</p>' : '') +
+      '</section>';
+    }).join('');
+
+    var callout = missing.length
+      ? '<div class="callout" role="alert"><h3>Göndermeden önce ' + missing.length + ' zorunlu soruyu yanıtlayın</h3><ul>' +
+        missing.map(function (m) { return '<li><button type="button" data-edit="' + m.i + '" data-focus-q="' + m.q.id + '">' + pad(m.i + 1) + ' · ' + esc(m.q.label) + '</button></li>'; }).join('') +
+        '</ul></div>'
+      : '';
+
+    return '<header class="sec-head">' +
+        '<p class="eyebrow">Son adım</p>' +
+        '<h1 class="sec-title" tabindex="-1" data-focus-target>Yanıtlarınızı gözden geçirin</h1>' +
+        '<p class="sec-intro">Göndermeden önce her bölümü kontrol edin. Bir şeyi değiştirmek isterseniz “Düzenle” ile o bölüme dönün. Yanıtlarınız korunur.</p>' +
+      '</header>' +
+      '<div class="rv-summary"><div><b>' + t.done + '<span style="font-size:18px;color:var(--ink-2);font-weight:500"> / ' + t.total + '</span></b><span>soru yanıtlandı</span></div>' +
+        '<div><b>' + missing.length + '</b><span>eksik zorunlu soru</span></div>' +
+        '<div><b>%' + t.pct + '</b><span>tamamlanma</span></div></div>' +
+      callout + secs +
+      '<div class="agree' + (state.agreeError ? ' invalid' : '') + '" id="agree-box">' +
+        '<label class="opt"><input type="checkbox" id="confirm-accurate"' + (state.confirmed ? ' checked' : '') + ' aria-describedby="agree-msg"><span class="ind" aria-hidden="true"></span><span>Verdiğim bilgilerin, bildiğim kadarıyla doğru olduğunu onaylıyorum.</span></label>' +
+        '<p class="agree-note">' + (CONFIG.submitEndpoint ? 'Formu gönderdiğinizde yanıtlarınız MAGIK Studio’ya iletilir.' : 'Bu sürümde gönderim sunucusu bağlı değil. Gönderdiğinizde yanıtlarınız bu cihazda saklanır ve bir sonraki ekranda bize iletmeniz için kopyalanabilir.') + '</p>' +
+        '<p class="form-msg" id="agree-msg" role="alert">' + (state.agreeError ? 'Göndermek için bu kutuyu işaretleyin.' : '') + '</p>' +
+      '</div>';
+  }
+
+  /* ---------- visibility ---------- */
+  function syncVisibility(animate) {
+    if (typeof state.step !== 'number' || state.step >= N) return;
+    var s = SECTIONS[state.step];
+    s.questions.forEach(function (q) {
+      var el = app.querySelector('[data-q="' + q.id + '"]');
+      if (!el) return;
+      var vis = visible(q);
+      setCollapsed(el, !vis, animate);
+      if (q.options && q.options.some(function (o) { return o.v === 'other'; })) {
+        var cur = state.answers[q.id];
+        var otherOn = Array.isArray(cur) ? cur.indexOf('other') > -1 : cur === 'other';
+        var ow = el.querySelector('[data-other="' + q.id + '"]');
+        if (ow) setCollapsed(ow, !otherOn, animate);
+      }
+      if (q.exclude) {
+        var ex = q.exclude(state.answers);
+        el.querySelectorAll('.opt').forEach(function (lab) {
+          var hide = ex.indexOf(lab.getAttribute('data-v')) > -1;
+          lab.hidden = hide;
+          var inp = lab.querySelector('input');
+          if (hide && inp.checked) {
+            inp.checked = false;
+            state.answers[q.id] = (state.answers[q.id] || []).filter(function (v) { return v !== inp.value; });
+          }
+        });
+      }
+    });
+  }
+  function setCollapsed(el, collapsed, animate) {
+    if (!animate) {
+      el.style.transition = 'none';
+      var inner = el.firstElementChild;
+      if (inner) inner.style.transition = 'none';
+    }
+    el.classList.toggle('collapsed', collapsed);
+    el.inert = collapsed;
+    if (!animate) {
+      void el.offsetHeight;
+      el.style.transition = '';
+      if (el.firstElementChild) el.firstElementChild.style.transition = '';
+    }
+  }
+
+  /* ---------- errors ---------- */
+  function clearError(id) {
+    var el = app.querySelector('[data-q="' + id + '"]');
+    if (!el || !el.classList.contains('invalid')) return;
+    el.classList.remove('invalid');
+    el.querySelectorAll('[aria-invalid]').forEach(function (x) { x.removeAttribute('aria-invalid'); });
+    var e = document.getElementById('e-' + id); if (e) e.textContent = '';
+  }
+  function showErrors(errs) {
+    errs.forEach(function (er) {
+      var el = app.querySelector('[data-q="' + er.q.id + '"]');
+      if (!el) return;
+      el.classList.add('invalid');
+      var e = document.getElementById('e-' + er.q.id); if (e) e.textContent = er.msg;
+      var f = el.querySelector('input:not([type=radio]):not([type=checkbox]), textarea');
+      if (f) f.setAttribute('aria-invalid', 'true');
+      else { var fs = el.querySelector('fieldset'); if (fs) fs.setAttribute('aria-invalid', 'true'); }
+    });
+    var first = errs[0] && app.querySelector('[data-q="' + errs[0].q.id + '"]');
+    if (first) {
+      first.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' });
+      var target = first.querySelector('input:not([type=hidden]), textarea');
+      if (target) setTimeout(function () { target.focus({ preventScroll: true }); }, reduceMotion() ? 0 : 300);
+    }
+    setActionMsg(errs.length === 1 ? '1 zorunlu soru eksik' : errs.length + ' soruda düzeltme gerekiyor', true);
+  }
+  function setActionMsg(text, isErr) {
+    state.formMsg = isErr ? text : '';
+    var el = document.getElementById('action-msg');
+    if (el) { el.textContent = text; el.classList.toggle('msg', !!isErr); }
+  }
+  function reduceMotion() { return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+
+  function autosize(t) {
+    t.style.height = 'auto';
+    t.style.height = Math.max(t.scrollHeight + 2, t.classList.contains('short') ? 64 : 104) + 'px';
+  }
+
+  /* =====================================================================
+     Navigation
+     ===================================================================== */
+  function goTo(step, opts) {
+    opts = opts || {};
+    state.step = step;
+    state.railOpen = false;
+    state.formMsg = '';
+    state.agreeError = false;
+    if (typeof step === 'number') {
+      if (step > state.furthest) state.furthest = step;
+      if (step < N && state.visited.indexOf(step) < 0) state.visited.push(step);
+      writeJSON(CONFIG.sessionKey, 1, 'session');
+    }
+    if (step === REVIEW) state.fromReview = false;
+    render({ focusHeading: true });
+    if (opts.focusQ) {
+      var el = app.querySelector('[data-q="' + opts.focusQ + '"]');
+      if (el) {
+        el.scrollIntoView({ block: 'center' });
+        var f = el.querySelector('input, textarea');
+        if (f) f.focus({ preventScroll: true });
+      }
+    }
+    saveNow();
+  }
+
+  function next() {
+    var errs = sectionErrors(state.step);
+    if (errs.length) { showErrors(errs); return; }
+    if (state.fromReview || state.step === N - 1) goTo(REVIEW);
+    else goTo(state.step + 1);
+  }
+  function back() {
+    if (state.step === REVIEW) goTo(N - 1);
+    else if (state.step === 0) { saveNow(); state.step = 'welcome'; removeKey(CONFIG.sessionKey, 'session'); render({ focusHeading: true }); }
+    else goTo(state.step - 1);
+  }
+
+  async function submit() {
+    var missing = [];
+    SECTIONS.forEach(function (s, i) { missingRequired(i).forEach(function (q) { missing.push({ i: i, q: q }); }); });
+    if (missing.length) {
+      setActionMsg(missing.length + ' zorunlu soru eksik', true);
+      var c = app.querySelector('.callout'); if (c) c.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' });
+      return;
+    }
+    if (!state.confirmed) {
+      state.agreeError = true;
+      var box = document.getElementById('agree-box');
+      box.classList.add('invalid');
+      document.getElementById('agree-msg').textContent = 'Göndermek için bu kutuyu işaretleyin.';
+      box.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' });
+      document.getElementById('confirm-accurate').focus({ preventScroll: true });
+      return;
+    }
+    state.submitting = true;
+    var btn = app.querySelector('[data-act="submit"]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Gönderiliyor…'; }
+    var payload = buildPayload();
+    try {
+      var result = await submitResponses(payload);
+      state.submission = { submittedAt: payload.submittedAt, delivered: result.delivered, mode: result.mode, answers: state.answers };
+      writeJSON(CONFIG.submittedKey, state.submission);
+      removeKey(CONFIG.draftKey);
+      removeKey(CONFIG.sessionKey, 'session');
+      state.submitting = false;
+      state.step = 'done';
+      render({ focusHeading: true });
+    } catch (err) {
+      state.submitting = false;
+      if (btn) { btn.disabled = false; btn.textContent = 'Formu gönder'; }
+      setActionMsg('Gönderilemedi. Bağlantınızı kontrol edip tekrar deneyin. Yanıtlarınız bu cihazda kayıtlı.', true);
+    }
+  }
+
+  function buildPayload() {
+    var visibleAnswers = {};
+    var readable = SECTIONS.map(function (s, i) {
+      var items = [];
+      visibleQs(i).forEach(function (q) {
+        if (!answered(q)) return;
+        visibleAnswers[q.id] = state.answers[q.id];
+        if (state.answers[q.id + '__other']) visibleAnswers[q.id + '__other'] = state.answers[q.id + '__other'];
+        items.push({ id: q.id, question: q.label, answer: displayValue(q) });
+      });
+      return { section: s.title, items: items };
+    });
+    return {
+      formId: CONFIG.formId,
+      version: CONFIG.formVersion,
+      locale: 'tr',
+      submittedAt: Date.now(),
+      company: state.answers.company || '',
+      contact: state.answers.contact || '',
+      answers: visibleAnswers,
+      readable: readable,
+      text: answersText()
+    };
+  }
+
+  function answersText() {
+    var ans = state.submission ? state.submission.answers : state.answers;
+    var prev = state.answers; state.answers = ans;
+    var lines = ['MAGIK Studio · Web sitesi keşif formu', (ans.company || '') + (state.submission ? ' · ' + longDate(state.submission.submittedAt) : ''), ''];
+    SECTIONS.forEach(function (s, i) {
+      var qs = visibleQs(i).filter(answered);
+      if (!qs.length) return;
+      lines.push(pad(i + 1) + ' ' + s.title.toLocaleUpperCase('tr-TR'));
+      qs.forEach(function (q) { lines.push('• ' + q.label); lines.push('  ' + displayValue(q).replace(/\n/g, '\n  ')); });
+      lines.push('');
+    });
+    state.answers = prev;
+    return lines.join('\n');
+  }
+
+  async function copyAnswers() {
+    var note = document.getElementById('copy-note');
+    var text = answersText();
+    try {
+      await navigator.clipboard.writeText(text);
+      if (note) note.textContent = 'Kopyalandı. E-postanıza ya da mesajınıza yapıştırabilirsiniz.';
+    } catch (e) {
+      state.copyFallback = true;
+      render({ scroll: false });
+      var ta = document.getElementById('copy-area');
+      if (ta) { ta.focus(); ta.select(); }
+      var n2 = document.getElementById('copy-note');
+      if (n2) n2.textContent = 'Otomatik kopyalanamadı. Metin seçildi, kopyalamak için Cmd+C ya da Ctrl+C kullanın.';
+    }
+  }
+
+  /* =====================================================================
+     Events
+     ===================================================================== */
+  app.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-act], [data-goto], [data-edit]');
+    if (!t) return;
+    if (t.hasAttribute('data-goto')) { var g = +t.getAttribute('data-goto'); if (g !== state.step) goTo(g); else { state.railOpen = false; render({ scroll: false }); } return; }
+    if (t.hasAttribute('data-edit')) {
+      state.fromReview = true;
+      var i = +t.getAttribute('data-edit');
+      state.step = null;
+      goTo(i, { focusQ: t.getAttribute('data-focus-q') });
+      state.fromReview = true;
+      var nb = app.querySelector('[data-act="next"]');
+      if (nb) nb.outerHTML = '<button class="btn btn-solid" type="button" data-act="next">Gözden geçirmeye dön ' + ICON.arrowR + '</button>';
+      return;
+    }
+    switch (t.getAttribute('data-act')) {
+      case 'start':
+        state.answers = {}; state.visited = []; state.furthest = -1; state.fromReview = false;
+        goTo(0); break;
+      case 'resume': {
+        var d = readJSON(CONFIG.draftKey) || {};
+        state.answers = d.answers || {}; state.visited = d.visited || []; state.furthest = typeof d.furthest === 'number' ? d.furthest : 0;
+        state.savedAt = d.updatedAt || null;
+        goTo(typeof d.step === 'number' ? d.step : 0); break;
+      }
+      case 'discard': state.confirmDiscard = true; render({ scroll: false }); app.querySelector('[data-act="discard-yes"]').focus(); break;
+      case 'discard-no': state.confirmDiscard = false; render({ scroll: false }); break;
+      case 'discard-yes':
+        removeKey(CONFIG.draftKey); state.confirmDiscard = false; state.answers = {}; state.visited = []; state.furthest = -1; state.savedAt = null;
+        render({ scroll: false }); var sb = app.querySelector('[data-act="start"]'); if (sb) sb.focus(); break;
+      case 'next': next(); break;
+      case 'back': back(); break;
+      case 'submit': submit(); break;
+      case 'rail-open': state.railOpen = true; document.getElementById('rail').classList.add('open'); t.setAttribute('aria-expanded', 'true'); var cb = app.querySelector('[data-act="rail-close"]'); if (cb) cb.focus(); break;
+      case 'rail-close': state.railOpen = false; document.getElementById('rail').classList.remove('open'); var ob = app.querySelector('[data-act="rail-open"]'); if (ob) { ob.setAttribute('aria-expanded', 'false'); ob.focus(); } break;
+      case 'copy': copyAnswers(); break;
+      case 'new':
+        removeKey(CONFIG.submittedKey);
+        state.submission = null; state.answers = {}; state.visited = []; state.furthest = -1; state.confirmed = false; state.copyFallback = false; state.savedAt = null;
+        state.step = 'welcome'; render({ focusHeading: true }); break;
+    }
+  });
+
+  app.addEventListener('input', function (e) {
+    var t = e.target;
+    var key = t.getAttribute('data-key');
+    if (!key) return;
+    state.answers[key] = t.value;
+    if (t.tagName === 'TEXTAREA') autosize(t);
+    clearError(key.replace(/__other$/, ''));
+    if (state.formMsg) setActionMsg(typeof state.step === 'number' && state.step < N ? 'Bölüm ' + (state.step + 1) + ' / ' + N : '', false);
+    if (t.type === 'date') syncVisibility(true);
+    paintProgress();
+    scheduleSave();
+  });
+
+  app.addEventListener('change', function (e) {
+    var t = e.target;
+    if (t.id === 'confirm-accurate') {
+      state.confirmed = t.checked;
+      if (t.checked) { state.agreeError = false; document.getElementById('agree-box').classList.remove('invalid'); document.getElementById('agree-msg').textContent = ''; }
+      return;
+    }
+    if (t.type !== 'radio' && t.type !== 'checkbox') return;
+    var id = t.name;
+    var q = findQ(id);
+    if (!q) return;
+    if (t.type === 'radio') {
+      state.answers[id] = t.value;
+    } else {
+      if (q.exclusive && t.checked) {
+        app.querySelectorAll('input[name="' + id + '"]').forEach(function (x) {
+          if (t.value === q.exclusive ? x !== t : x.value === q.exclusive) x.checked = false;
+        });
+      }
+      state.answers[id] = Array.prototype.map.call(app.querySelectorAll('input[name="' + id + '"]:checked'), function (x) { return x.value; });
+    }
+    clearError(id);
+    if (state.formMsg) setActionMsg('Bölüm ' + (state.step + 1) + ' / ' + N, false);
+    syncVisibility(true);
+    if (t.value === 'other' && t.checked) {
+      var o = document.getElementById(id + '__other');
+      if (o) setTimeout(function () { o.focus({ preventScroll: true }); }, 60);
+    }
+    paintProgress();
+    scheduleSave();
+  });
+
+  app.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && typeof state.step === 'number') {
+      e.preventDefault();
+      if (state.step === REVIEW) submit(); else next();
+    }
+    if (e.key === 'Escape' && state.railOpen) {
+      var cb = app.querySelector('[data-act="rail-close"]'); if (cb) cb.click();
+    }
+  });
+
+  window.addEventListener('pagehide', function () { if (saveTimer) saveNow(); });
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden' && saveTimer) saveNow(); });
+
+  function findQ(id) {
+    for (var i = 0; i < SECTIONS.length; i++) {
+      for (var j = 0; j < SECTIONS[i].questions.length; j++) if (SECTIONS[i].questions[j].id === id) return SECTIONS[i].questions[j];
+    }
+    return null;
+  }
+
+  /* =====================================================================
+     Boot: a refresh mid-form returns to the same step; a later visit
+     lands on the welcome screen with a resume card.
+     ===================================================================== */
+  document.documentElement.lang = 'tr';
+  (function boot() {
+    state.storageOk = !!store('local') && writeJSON('magik-discovery:probe', 1) && (removeKey('magik-discovery:probe'), true);
+    var draft = readJSON(CONFIG.draftKey);
+    var submitted = readJSON(CONFIG.submittedKey);
+    var active = readJSON(CONFIG.sessionKey, 'session');
+    if (draft && active && typeof draft.step === 'number') {
+      state.answers = draft.answers || {};
+      state.visited = draft.visited || [];
+      state.furthest = typeof draft.furthest === 'number' ? draft.furthest : draft.step;
+      state.savedAt = draft.updatedAt || null;
+      state.step = draft.step;
+    } else if (!draft && submitted) {
+      state.submission = submitted;
+      state.step = 'done';
+    }
+    render();
+  })();
+})();
+</script>
