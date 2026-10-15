@@ -575,7 +575,7 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
   var CONFIG = {
     submitEndpoint: WEB3FORMS_KEY ? 'https://api.web3forms.com/submit' : null,
     submitHeaders: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    draftKey: 'magik-discovery:draft:v1',
+    draftKey: 'magik-discovery:draft:v2',
     submittedKey: 'magik-discovery:submitted:v1',
     sessionKey: 'magik-discovery:active',
     formId: 'magik-website-discovery',
@@ -594,6 +594,7 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
       'Yanıtlar': payload.text,
       'Ham veri (JSON)': JSON.stringify(payload.answers)
     };
+    if (!payload.contact) delete body['İletişim kişisi'];
     if (email) body.replyto = email;
     var res = await fetch(CONFIG.submitEndpoint, {
       method: 'POST',
@@ -656,7 +657,7 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
       short: 'Hedefler',
       intro: 'Web sitesi bir araç. Hangi iş sonucuna hizmet edeceğini netleştirdiğimizde sayfa yapısından buton metnine kadar her karar o hedefe göre şekillenir.',
       questions: [
-        { id: 'primaryGoal', type: 'single', req: true, label: 'Yeni web sitenizin birincil hedefi nedir?', hint: 'En önemli olanı seçin. Diğer hedefleri sonraki sorularda konuşacağız.', options: [
+        { id: 'primaryGoal', type: 'single', req: true, label: 'Yeni web sitenizin birincil hedefi nedir?', hint: 'En önemli olanı seçin. Diğer hedeflerinizi bir sonraki soruda yazabilirsiniz.', options: [
           { v: 'leads', l: 'Nitelikli potansiyel müşteri kazanmak' },
           { v: 'demos', l: 'Demo taleplerini artırmak' },
           { v: 'signups', l: 'Ürün kayıtlarını artırmak' },
@@ -678,8 +679,6 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
         ], showIf: function (a) { return a.primaryGoal === 'signups'; } },
         { id: 'goalDemoFlow', type: 'textarea', sub: true, ctx: 'Demo talepleri', label: 'Demolar şu anda nasıl planlanıyor? Bir randevu aracı kullanıyor musunuz?', hint: 'Örn. Calendly, HubSpot Meetings, Chili Piper ya da e-postayla manuel planlama', showIf: function (a) { return a.primaryGoal === 'demos'; } },
         { id: 'goals12', type: 'textarea', label: 'Önümüzdeki 6–12 ay için en önemli iş hedefleriniz neler?' },
-        { id: 'whyNow', type: 'textarea', label: 'Web sitenizi kurmak ya da yenilemek için neden şimdi doğru zaman?' },
-        { id: 'success', type: 'textarea', label: 'Bu projeyi işiniz için başarılı kılacak şey ne olur?' }
       ]
     },
     {
@@ -688,13 +687,9 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
       short: 'Hedef kitle',
       intro: 'Sitenin ikna etmesi gereken kişileri ne kadar iyi tanırsak mesajı, kanıtları ve akışı o kadar isabetli kurarız.',
       questions: [
-        { id: 'icp', type: 'textarea', label: 'İdeal müşteriniz kim?' },
         { id: 'segments', type: 'textarea', rows: 2, label: 'Hangi sektörleri ya da şirket büyüklüklerini hedefliyorsunuz?' },
-        { id: 'decisionMaker', type: 'text', label: 'Satın alma kararını genellikle kim veriyor?', placeholder: 'Örn. pazarlama direktörü, kurucu, satın alma ekibi' },
         { id: 'problem', type: 'textarea', label: 'Müşterileriniz sizi keşfettiklerinde hangi sorunu çözmeye çalışıyorlar?' },
         { id: 'objections', type: 'textarea', label: 'Potansiyel müşterilerin satın almasını engelleyen en büyük itirazlar ya da endişeler neler?' },
-        { id: 'newAudience', type: 'single', layout: 'inline', label: 'Bu web sitesiyle yeni bir kitleyi ya da pazarı mı hedefliyorsunuz?', options: YNU },
-        { id: 'newAudienceDesc', type: 'textarea', sub: true, label: 'Bu yeni kitleyi ya da pazarı anlatın.', showIf: function (a) { return a.newAudience === 'yes'; } }
       ]
     },
     {
@@ -703,36 +698,15 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
       short: 'Konumlandırma',
       intro: 'Sizi alternatiflerden ayıran şeyi netleştirmek, sitenin sesini ve sayfadaki bilgi hiyerarşisini belirler.',
       questions: [
-        { id: 'oneLiner', type: 'textarea', rows: 2, label: 'Ürününüzü ya da hizmetinizi tek cümleyle nasıl anlatırsınız?' },
         { id: 'different', type: 'textarea', label: 'Sizi rakiplerinizden farklı kılan ne?' },
-        { id: 'whyUs', type: 'textarea', label: 'Müşteriler neden alternatif çözümler yerine sizi seçmeli?' },
-        { id: 'posChange', type: 'single', layout: 'inline', label: 'Bu projeyle birlikte konumlandırmanız ya da mesajınız değişiyor mu?', options: YNU },
-        { id: 'posChangeDesc', type: 'textarea', sub: true, label: 'Ne değişiyor? Bugünkü ve hedeflenen yaklaşımı kısaca anlatın.', showIf: function (a) { return a.posChange === 'yes'; } },
-        { id: 'threeThings', type: 'textarea', rows: 4, label: 'Ziyaretçilerin işiniz hakkında anlaması gereken en önemli üç şey nedir?', hint: 'Her birini ayrı bir satıra yazabilirsiniz.' },
-        { id: 'mustAvoid', type: 'textarea', opt: true, label: 'Kullanmamız ya da kaçınmamız gereken belirli mesajlar, iddialar veya terimler var mı?' }
       ]
     },
     {
       id: 'gtm',
       title: 'Pazarlama ve Pazara Giriş',
       short: 'Pazarlama',
-      intro: 'Trafiğin nereden geldiği, ziyaretçinin siteye hangi beklentiyle girdiğini belirler. LinkedIn reklamından gelen biriyle Google aramasından gelen biri aynı sayfaya ihtiyaç duymaz.',
+      intro: 'Web sitesinin satış ve pazarlama çalışmalarınızın içinde nasıl bir rol oynayacağını anlamak istiyoruz.',
       questions: [
-        { id: 'traffic', type: 'multi', exclusive: 'unsure', label: 'Web sitesi trafiğinizin çoğunun nereden gelmesini bekliyorsunuz?', hint: 'Birden fazla seçebilirsiniz.', options: [
-          { v: 'seo', l: 'Organik arama / SEO' },
-          { v: 'paid', l: 'Ücretli reklamlar' },
-          { v: 'social', l: 'LinkedIn ya da diğer sosyal medya' },
-          { v: 'outbound', l: 'Outbound satış' },
-          { v: 'email', l: 'E-posta pazarlaması' },
-          { v: 'referral', l: 'Referans ya da iş ortağı kanalları' },
-          { v: 'plg', l: 'Ürün odaklı büyüme' },
-          { v: 'customers', l: 'Mevcut müşteriler' },
-          { v: 'pr', l: 'PR ya da medya' },
-          { v: 'unsure', l: 'Henüz emin değiliz' },
-          OTHER
-        ] },
-        { id: 'gtmInit', type: 'single', layout: 'inline', label: 'Bu web sitesi daha geniş bir pazarlama ya da pazara giriş girişiminin parçası mı?', options: YNU },
-        { id: 'launchPlans', type: 'textarea', label: 'Bir ürün lansmanı, kampanya, pazar genişlemesi ya da konumlandırma değişikliği planlıyor musunuz?', hint: 'Varsa zamanlamasını da yazın.' },
         { id: 'salesSupport', type: 'textarea', label: 'Satış ekibinizin, satış sürecinin belirli bir aşamasında web sitesinden desteğe ihtiyacı var mı?', hint: 'Örn. ilk görüşme öncesi güven oluşturmak, teklif sonrası karar vericiyi ikna etmek' },
         { id: 'landingPages', type: 'single', layout: 'inline', label: 'Belirli ürünler, sektörler ya da kampanyalar için özel açılış sayfalarına ihtiyacınız var mı?', options: YNU },
         { id: 'landingPagesDesc', type: 'textarea', sub: true, opt: true, rows: 2, label: 'Hangileri için? Kabaca bir liste yeterli.', showIf: function (a) { return a.landingPages === 'yes'; } }
@@ -746,52 +720,15 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
       questions: [
         { id: 'primaryAction', type: 'single', req: true, label: 'Ziyaretçilerin yapmasını istediğiniz birincil eylem nedir?', options: ACTIONS },
         { id: 'secondaryActions', type: 'multi', opt: true, label: 'Ziyaretçiler başka hangi eylemleri yapabilmeli?', hint: 'Birincil eylem bu listede yer almaz.', options: ACTIONS, exclude: function (a) { return a.primaryAction && a.primaryAction !== 'other' ? [a.primaryAction] : []; } },
-        { id: 'infoNeeded', type: 'textarea', label: 'Ziyaretçiler birincil eylemi yapmadan önce kendilerini rahat hissetmek için hangi bilgilere ihtiyaç duyuyor?', hint: 'Örn. fiyatlandırma, entegrasyonlar, güvenlik, kurulum süresi' },
-        { id: 'proof', type: 'multi', label: 'Güven oluşturmak için hangi kanıtlar işe yarar?', hint: 'Birden fazla seçebilirsiniz.', options: [
-          { v: 'testimonials', l: 'Müşteri yorumları' },
-          { v: 'cases', l: 'Vaka çalışmaları' },
-          { v: 'logos', l: 'Müşteri logoları' },
-          { v: 'demos', l: 'Ürün demoları' },
-          { v: 'roi', l: 'ROI ya da performans verileri' },
-          { v: 'awards', l: 'Sertifikalar ya da ödüller' },
-          { v: 'reviews', l: 'Değerlendirmeler ya da puanlar' },
-          { v: 'team', l: 'Kurucu ya da ekip güvenilirliği' },
-          OTHER
-        ] },
-        { id: 'funnel', type: 'textarea', label: 'Göz önünde bulundurmamız gereken mevcut bir dönüşüm hunisi ya da satış süreciniz var mı?' },
-        { id: 'blockers', type: 'textarea', opt: true, label: 'Ziyaretçilerin harekete geçmesini şu anda ne engelliyor?' }
       ]
     },
     {
       id: 'current',
-      title: 'Mevcut Site ve Zorluklar',
+      title: 'Mevcut Web Siteniz',
       short: 'Mevcut site',
-      intro: function (a) {
-        return a.hasSite === 'no'
-          ? 'Henüz bir web siteniz olmadığını belirttiniz, bu yüzden bu bölüm kısa. Sizi bu karara getiren süreci anlamak istiyoruz.'
-          : 'Neyin işe yaradığını ve neyin yaramadığını bilmek, korunacak olanla değişecek olanı ayırmamızı sağlar.';
-      },
+      intro: 'Mevcut sitenizde işe yarayanı bilmek, yeni tasarımda neyi koruyacağımızı belirler.',
       questions: [
         { id: 'likes', type: 'textarea', opt: true, label: 'Mevcut web sitenizde neyi beğeniyorsunuz?', showIf: hasSite },
-        { id: 'notWorking', type: 'textarea', label: 'Neler iyi çalışmıyor?', showIf: hasSite },
-        { id: 'trigger', type: 'textarea', label: 'Web sitesini yenileme ya da oluşturma kararını ne tetikledi?' },
-        { id: 'analytics', type: 'single', label: 'Mevcut siteniz hakkında analitik verileriniz ya da içgörüleriniz var mı?', showIf: hasSite, options: [
-          { v: 'share', l: 'Evet, paylaşabiliriz' },
-          { v: 'review', l: 'Evet, ama önce kendi içimizde incelememiz gerekiyor' },
-          { v: 'no', l: 'Hayır' }
-        ] },
-        { id: 'analyticsFindings', type: 'textarea', sub: true, opt: true, label: 'Paylaşmak istediğiniz önemli bulgular var mı?', hint: 'Örn. en çok ziyaret alan sayfalar, çıkış oranı yüksek sayfalar, dönüşüm oranları', showIf: function (a) { return hasSite(a) && a.analytics === 'share'; } },
-        { id: 'metrics', type: 'multi', sub: true, opt: true, label: 'Şu anda hangi metrikleri takip ediyorsunuz?', options: [
-          { v: 'traffic', l: 'Web sitesi trafiği' },
-          { v: 'cvr', l: 'Dönüşüm oranı' },
-          { v: 'demos', l: 'Demo talepleri' },
-          { v: 'leads', l: 'Potansiyel müşteriler' },
-          { v: 'signups', l: 'Kayıtlar' },
-          { v: 'revenue', l: 'Gelir' },
-          { v: 'engagement', l: 'Etkileşim' },
-          OTHER
-        ], showIf: function (a) { return hasSite(a) && (a.analytics === 'share' || a.analytics === 'review'); } },
-        { id: 'preserve', type: 'textarea', opt: true, label: 'Korunması gereken mevcut sayfalar, özellikler ya da içerikler var mı?', showIf: hasSite }
       ]
     },
     {
@@ -800,76 +737,9 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
       short: 'Kapsam',
       intro: 'Projenin sınırlarını baştan çizmek, doğru ekibi kurmamızı ve takvimi gerçekçi planlamamızı sağlar.',
       questions: [
-        { id: 'help', type: 'multi', label: 'Hangi konularda desteğe ihtiyacınız var?', hint: 'Birden fazla seçebilirsiniz.', options: [
-          { v: 'strategy', l: 'Web sitesi stratejisi' },
-          { v: 'ia', l: 'Bilgi mimarisi' },
-          { v: 'ux', l: 'UX ve wireframe’ler' },
-          { v: 'ui', l: 'Web sitesi arayüz tasarımı' },
-          { v: 'copy', l: 'Metin yazarlığı ya da mesaj' },
-          { v: 'brand', l: 'Marka kimliği' },
-          { v: 'framer', l: 'Framer geliştirme' },
-          { v: 'cms', l: 'CMS kurulumu' },
-          { v: 'seo', l: 'SEO temelleri' },
-          { v: 'analytics', l: 'Analitik kurulumu' },
-          { v: 'cro', l: 'Dönüşüm optimizasyonu' },
-          OTHER
-        ] },
         { id: 'pages', type: 'textarea', opt: true, rows: 2, label: 'Sitede hangi sayfaların olmasını bekliyorsunuz?', hint: 'Örn. Ana sayfa, Ürün, Fiyatlandırma, Hakkımızda, Blog, İletişim' },
-        { id: 'brandSystem', type: 'single', label: 'Mevcut bir marka kimliğiniz ve tasarım sisteminiz var mı?', options: [
-          { v: 'keep', l: 'Evet, olduğu gibi korumak istiyoruz' },
-          { v: 'refine', l: 'Evet, ama iyileştirilmesi gerekiyor' },
-          { v: 'none', l: 'Hayır, oluşturmak için desteğe ihtiyacımız var' }
-        ] },
-        { id: 'assets', type: 'single', label: 'Hazır metin ve görsel içerikleriniz var mı?', options: [
-          { v: 'most', l: 'Evet, içeriğin çoğu hazır' },
-          { v: 'some', l: 'Bir kısmı hazır' },
-          { v: 'none', l: 'Hayır, oluşturmak için desteğe ihtiyacımız var' }
-        ] },
-        { id: 'tech', type: 'textarea', opt: true, label: 'Teknik gereksinimler ya da entegrasyonlar var mı?', hint: 'Örn. HubSpot, Salesforce, Calendly, Stripe, çok dilli yapı' },
-        { id: 'admire', type: 'textarea', opt: true, label: 'Beğendiğiniz web siteleri var mı? Nelerini beğeniyorsunuz?', hint: 'Bağlantıları ve kısa notlarınızı ekleyin.' },
-        { id: 'requirements', type: 'textarea', opt: true, label: 'Erişilebilirlik, yerelleştirme, SEO ya da performans konusunda bilmemiz gereken gereksinimler var mı?' }
       ]
     },
-    {
-      id: 'success',
-      title: 'Başarıyı Ölçmek',
-      short: 'Başarı ölçütleri',
-      intro: 'Lansmandan sonra sitenin işe yarayıp yaramadığını konuşabilmek için bugünden ölçülebilir hedefler koymamız gerekiyor.',
-      questions: [
-        { id: 'kpis', type: 'multi', label: 'Bu proje için en önemli KPI’lar hangileri?', hint: 'Birden fazla seçebilirsiniz.', options: [
-          { v: 'leads', l: 'Nitelikli potansiyel müşteriler' },
-          { v: 'demos', l: 'Demo talepleri' },
-          { v: 'signupCvr', l: 'Kayıt dönüşüm oranı' },
-          { v: 'leadToCustomer', l: 'Potansiyel müşteriden müşteriye dönüşüm' },
-          { v: 'revenue', l: 'Satış geliri' },
-          { v: 'organic', l: 'Organik trafik' },
-          { v: 'awareness', l: 'Marka bilinirliği' },
-          { v: 'engagement', l: 'Etkileşim' },
-          { v: 'enablement', l: 'Satış ekibine destek' },
-          OTHER
-        ] },
-        { id: 'baseline', type: 'single', layout: 'inline', label: 'Mevcut temel metrikleriniz var mı?', options: YNU },
-        { id: 'baselineDesc', type: 'textarea', sub: true, opt: true, label: 'Mevcut metriklerinizi ve hedeflediğiniz iyileşmeyi paylaşın.', hint: 'Örn. ayda 40 demo talebi, hedef 70', showIf: function (a) { return a.baseline === 'yes'; } },
-        { id: 'threeMonths', type: 'textarea', label: 'Lansmandan üç ay sonra “Bu site işe yarıyor” demenizi ne sağlar?' }
-      ]
-    },
-    {
-      id: 'timeline',
-      title: 'Takvim ve İş Birliği',
-      short: 'Takvim',
-      intro: 'Son olarak lojistik. Takvimi neyin belirlediğini ve kararları kimin verdiğini bilmek, süreci sürprizsiz yönetmemizi sağlar.',
-      questions: [
-        { id: 'launchMode', type: 'single', layout: 'inline', label: 'Hedeflediğiniz bir lansman tarihi var mı?', options: [
-          { v: 'date', l: 'Belirli bir tarih' }, { v: 'period', l: 'Yaklaşık bir dönem' }, { v: 'tbd', l: 'Henüz belli değil' }
-        ] },
-        { id: 'launchDate', type: 'date', sub: true, label: 'Hedef lansman tarihi', showIf: function (a) { return a.launchMode === 'date'; } },
-        { id: 'launchPeriod', type: 'text', sub: true, label: 'Yaklaşık dönem', placeholder: 'Örn. 2027’nin ilk çeyreği, Mart sonu', showIf: function (a) { return a.launchMode === 'period'; } },
-        { id: 'deadline', type: 'textarea', opt: true, rows: 2, label: 'Takvimi belirleyen belirli bir etkinlik, lansman ya da son tarih var mı?' },
-        { id: 'approvers', type: 'text', label: 'Projeyi incelemek ve onaylamak için kimler dahil olacak?', placeholder: 'Örn. kurucu, pazarlama direktörü, CTO' },
-        { id: 'contact', type: 'text', req: true, label: 'Birincil iletişim kişisi kim olacak?', hint: 'Adını, unvanını ve e-posta adresini yazın.', placeholder: 'Örn. Elif Yılmaz, Pazarlama Direktörü, elif@ornek.com', autocomplete: 'off' },
-        { id: 'anythingElse', type: 'textarea', opt: true, label: 'Başlamadan önce bilmemiz gereken başka bir şey var mı?' }
-      ]
-    }
   ];
   var N = SECTIONS.length;
   var REVIEW = N; // step index of the review screen
@@ -945,6 +815,9 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
     return /^(https?:\/\/)?([a-z0-9¡-￿-]+\.)+[a-z¡-￿]{2,}(:\d+)?(\/\S*)?$/i.test(String(v).trim());
   }
   function visibleQs(i) { return SECTIONS[i].questions.filter(visible); }
+  function sectionShown(i) { return i >= 0 && i < N && visibleQs(i).length > 0; }
+  function nextStep(i) { for (var j = i + 1; j < N; j++) if (sectionShown(j)) return j; return REVIEW; }
+  function prevStep(i) { for (var j = i - 1; j >= 0; j--) if (sectionShown(j)) return j; return -1; }
   function missingRequired(i) { return visibleQs(i).filter(function (q) { return q.req && !answered(q); }); }
   function sectionErrors(i) {
     var errs = [];
@@ -1062,7 +935,7 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
           '<p class="eyebrow">MAGIK Studio / Web sitesi keşfi</p>' +
           '<h1 class="display" id="w-title" tabindex="-1" data-focus-target>İşinizi ileri taşıyacak bir web sitesi kuralım.</h1>' +
           '<p class="lede">Tasarıma başlamadan önce işinizi, kitlenizi ve sizin için başarının neye benzediğini anlamak istiyoruz. Bu kısa form, web siteniz için doğru yönü ortaya çıkarmamıza yardımcı olacak.</p>' +
-          '<ul class="facts"><li>Tahmini süre <strong>8–12 dakika</strong></li><li><strong>10</strong> bölüm</li><li>Yanıtlarınız bu cihazda otomatik kaydedilir</li></ul>' +
+          '<ul class="facts"><li>Tahmini süre <strong>4–6 dakika</strong></li><li><strong>' + N + '</strong> bölüm</li><li>Yanıtlarınız bu cihazda otomatik kaydedilir</li></ul>' +
           (resume || '<div class="cta-row"><button class="btn btn-white" data-act="start" type="button">Hadi başlayalım ' + ICON.arrowR + '</button></div>') +
         '</section>' +
         '<aside class="stage-aside grid-bg" aria-label="Formun bölümleri">' +
@@ -1124,6 +997,7 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
   function railHTML() {
     var t = totals();
     var items = SECTIONS.map(function (s, i) {
+      if (!sectionShown(i)) return '';
       var current = state.step === i;
       var reachable = i <= Math.max(state.furthest, 0);
       var st = '';
@@ -1239,7 +1113,7 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
     } else if (state.fromReview) {
       next = '<button class="btn btn-solid" type="button" data-act="next">Gözden geçirmeye dön ' + ICON.arrowR + '</button>';
     } else {
-      next = '<button class="btn btn-solid" type="button" data-act="next">' + (state.step === N - 1 ? 'Gözden geçir' : 'Devam et') + ' ' + ICON.arrowR + '</button>';
+      next = '<button class="btn btn-solid" type="button" data-act="next">' + (nextStep(state.step) === REVIEW ? 'Gözden geçir' : 'Devam et') + ' ' + ICON.arrowR + '</button>';
     }
     return '<div class="actions"><div class="actions-in">' + back + mid + next + '</div></div>';
   }
@@ -1251,6 +1125,7 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
     SECTIONS.forEach(function (s, i) { missingRequired(i).forEach(function (q) { missing.push({ i: i, q: q }); }); });
 
     var secs = SECTIONS.map(function (s, i) {
+      if (!sectionShown(i)) return '';
       var qs = visibleQs(i);
       var done = qs.filter(answered);
       var skipped = qs.length - done.length;
@@ -1402,13 +1277,12 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
   function next() {
     var errs = sectionErrors(state.step);
     if (errs.length) { showErrors(errs); return; }
-    if (state.fromReview || state.step === N - 1) goTo(REVIEW);
-    else goTo(state.step + 1);
+    goTo(state.fromReview ? REVIEW : nextStep(state.step));
   }
   function back() {
-    if (state.step === REVIEW) goTo(N - 1);
-    else if (state.step === 0) { saveNow(); state.step = 'welcome'; removeKey(CONFIG.sessionKey, 'session'); render({ focusHeading: true }); }
-    else goTo(state.step - 1);
+    var prev = prevStep(state.step === REVIEW ? N : state.step);
+    if (prev < 0) { saveNow(); state.step = 'welcome'; removeKey(CONFIG.sessionKey, 'session'); render({ focusHeading: true }); }
+    else goTo(prev);
   }
 
   async function submit() {
