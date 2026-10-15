@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@300..800&family=Inter:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: split like the magik.studio hero. Forest rail (progress + index) left, paper working column right.
-   Welcome and confirmation are full-bleed forest with the blueprint grid. Single committed look (brand is two-tone). */
+   Welcome and confirmation are full-bleed forest. Single committed look (brand is two-tone). */
 :root {
   color-scheme: light;
   /* Magik Design System colors */
@@ -99,15 +99,6 @@ fieldset { border: 0; padding: 0; min-width: 0; }
 /* ---------- Brand marks ---------- */
 .wordmark { display: block; height: 30px; width: auto; color: #fff; }
 .mark { display: block; height: 28px; width: auto; color: #fff; }
-
-/* ---------- Blueprint grid ---------- */
-.grid-bg {
-  background-image:
-    linear-gradient(to right, var(--on-dark-4) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--on-dark-4) 1px, transparent 1px);
-  background-size: 44px 44px;
-  background-position: -1px -1px;
-}
 
 /* ===================================================================
    Stage: welcome + confirmation (full-bleed forest)
@@ -938,7 +929,7 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
           '<ul class="facts"><li>Tahmini süre <strong>4–6 dakika</strong></li><li><strong>' + N + '</strong> bölüm</li><li>Yanıtlarınız bu cihazda otomatik kaydedilir</li></ul>' +
           (resume || '<div class="cta-row"><button class="btn btn-white" data-act="start" type="button">Hadi başlayalım ' + ICON.arrowR + '</button></div>') +
         '</section>' +
-        '<aside class="stage-aside grid-bg" aria-label="Formun bölümleri">' +
+        '<aside class="stage-aside" aria-label="Formun bölümleri">' +
           '<p class="toc-cap">Neler soracağız</p>' +
           '<ol class="toc">' + toc + '</ol>' +
         '</aside>' +
@@ -967,7 +958,7 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
           '<p class="lede">Yanıtlarınız hedeflerinizi anlamamıza ve web siteniz için doğru yönü belirlememize yardımcı olacak. Bir sonraki görüşmemizden önce yanıtlarınızı inceleyeceğiz.</p>' +
           '<p class="sign">Görüşmek üzere,<span>MAGIK Studio</span></p>' +
         '</section>' +
-        '<aside class="stage-aside grid-bg" aria-label="Gönderim durumu">' +
+        '<aside class="stage-aside" aria-label="Gönderim durumu">' +
           '<div class="status">' + status + copy + '</div>' +
           '<div class="cta-row" style="margin-top:20px"><button class="btn btn-text" style="color:#fff" data-act="new" type="button">Yeni bir form başlat</button></div>' +
         '</aside>' +
