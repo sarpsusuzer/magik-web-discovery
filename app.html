@@ -195,8 +195,9 @@ fieldset { border: 0; padding: 0; min-width: 0; }
 
 @media (min-width: 960px) {
   .stage-body { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .stage-copy { padding: 88px 48px 64px 24px; justify-content: center; }
-  .stage-aside { border-top: 0; border-left: 1px solid var(--on-dark-4); padding: 64px 48px; justify-content: center; align-items: flex-start; }
+  .stage-copy { padding: 88px 48px 64px; justify-content: center; margin-inline: auto; width: 100%; max-width: 656px; }
+  .stage-aside { border-top: 0; border-left: 1px solid var(--on-dark-4); padding: 64px 48px; justify-content: center; align-items: center; }
+  .stage-aside > * { width: 100%; max-width: 560px; }
 }
 
 /* Confirmation */
