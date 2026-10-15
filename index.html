@@ -6,12 +6,12 @@
 </head>
 <body>
 <title>MAGIK Web Sitesi Keşfi</title>
-<meta name="description" content="MAGIK Studio web sitesi keşif formu">
+<meta name="description" content="Studio Magik web sitesi keşif formu">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@300..800&family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: split like the magik.studio hero. Forest rail (progress + index) left, paper working column right.
+/* Layout: split like the studiomagik.com hero. Forest rail (progress + index) left, paper working column right.
    Welcome and confirmation are full-bleed forest. Single committed look (brand is two-tone). */
 :root {
   color-scheme: light;
@@ -821,7 +821,7 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
     var errs = [];
     visibleQs(i).forEach(function (q) {
       if (q.req && !answered(q)) errs.push({ q: q, msg: q.type === 'single' ? 'Devam etmek için bir seçenek belirleyin.' : 'Devam etmek için bu soruyu yanıtlayın.' });
-      else if (q.type === 'url' && answered(q) && !urlValid(state.answers[q.id])) errs.push({ q: q, msg: 'Geçerli bir adres girin, örneğin magik.studio' });
+      else if (q.type === 'url' && answered(q) && !urlValid(state.answers[q.id])) errs.push({ q: q, msg: 'Geçerli bir adres girin, örneğin studiomagik.com' });
     });
     return errs;
   }
@@ -927,10 +927,10 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
     }).join('');
 
     return '<div class="stage">' +
-      '<header class="stage-nav">' + WORDMARK + '<span class="meta">magik.studio</span></header>' +
+      '<header class="stage-nav">' + WORDMARK + '<span class="meta">studiomagik.com</span></header>' +
       '<div class="stage-body">' +
         '<section class="stage-copy step-enter" aria-labelledby="w-title">' +
-          '<p class="eyebrow">MAGIK Studio / Web sitesi keşfi</p>' +
+          '<p class="eyebrow">Studio Magik / Web sitesi keşfi</p>' +
           '<h1 class="display" id="w-title" tabindex="-1" data-focus-target>İşinizi ileri taşıyacak bir web sitesi kuralım.</h1>' +
           '<p class="lede">Tasarıma başlamadan önce işinizi, kitlenizi ve sizin için başarının neye benzediğini anlamak istiyoruz. Bu kısa form, web siteniz için doğru yönü ortaya çıkarmamıza yardımcı olacak.</p>' +
           '<ul class="facts"><li>Tahmini süre <strong>4–6 dakika</strong></li><li><strong>' + N + '</strong> bölüm</li><li>Yanıtlarınız bu cihazda otomatik kaydedilir</li></ul>' +
@@ -948,22 +948,22 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
     var sub = state.submission || {};
     var delivered = sub.delivered;
     var status = delivered
-      ? '<div class="status-row"><span class="status-dot ok" aria-hidden="true"></span>MAGIK Studio’ya iletildi</div>' +
+      ? '<div class="status-row"><span class="status-dot ok" aria-hidden="true"></span>Studio Magik’e iletildi</div>' +
         '<p>' + esc(longDate(sub.submittedAt)) + ' tarihinde gönderildi. Bu tarayıcıda da bir kopyası saklanıyor.</p>'
       : '<div class="status-row"><span class="status-dot" aria-hidden="true"></span>Yanıtlarınız bu cihazda kayıtlı</div>' +
-        '<p>Bu form henüz bir gönderim sunucusuna bağlı değil, bu yüzden yanıtlarınız MAGIK Studio’ya otomatik olarak iletilmedi. Bize ulaşması için yanıtlarınızı kopyalayıp e-postayla ya da mesajla paylaşın.</p>';
+        '<p>Bu form henüz bir gönderim sunucusuna bağlı değil, bu yüzden yanıtlarınız Studio Magik’e otomatik olarak iletilmedi. Bize ulaşması için yanıtlarınızı kopyalayıp e-postayla ya da mesajla paylaşın.</p>';
     var copy = '<div class="cta-row"><button class="btn ' + (delivered ? 'btn-ghost-dark' : 'btn-white') + '" data-act="copy" type="button">Yanıtları kopyala</button>' +
       '<span class="resume-meta" id="copy-note" role="status"></span></div>' +
       (state.copyFallback ? '<label class="sr-only" for="copy-area">Yanıtların metni</label><textarea id="copy-area" class="copy-fallback" readonly>' + esc(answersText()) + '</textarea>' : '');
 
     return '<div class="stage">' +
-      '<header class="stage-nav">' + WORDMARK + '<span class="meta">magik.studio</span></header>' +
+      '<header class="stage-nav">' + WORDMARK + '<span class="meta">studiomagik.com</span></header>' +
       '<div class="stage-body">' +
         '<section class="stage-copy done-copy step-enter" aria-labelledby="d-title">' +
           '<p class="eyebrow">' + (delivered ? 'Form gönderildi' : 'Form tamamlandı') + '</p>' +
           '<h1 class="display" id="d-title" tabindex="-1" data-focus-target>Detayları paylaştığınız için teşekkürler.</h1>' +
           '<p class="lede">Yanıtlarınız hedeflerinizi anlamamıza ve web siteniz için doğru yönü belirlememize yardımcı olacak. Bir sonraki görüşmemizden önce yanıtlarınızı inceleyeceğiz.</p>' +
-          '<p class="sign">Görüşmek üzere,<span>MAGIK Studio</span></p>' +
+          '<p class="sign">Görüşmek üzere,<span>Studio Magik</span></p>' +
         '</section>' +
         '<aside class="stage-aside" aria-label="Gönderim durumu">' +
           '<div class="status">' + status + copy + '</div>' +
@@ -1158,7 +1158,7 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
       callout + secs +
       '<div class="agree' + (state.agreeError ? ' invalid' : '') + '" id="agree-box">' +
         '<label class="opt"><input type="checkbox" id="confirm-accurate"' + (state.confirmed ? ' checked' : '') + ' aria-describedby="agree-msg"><span class="ind" aria-hidden="true"></span><span>Verdiğim bilgilerin, bildiğim kadarıyla doğru olduğunu onaylıyorum.</span></label>' +
-        '<p class="agree-note">' + (CONFIG.submitEndpoint ? 'Formu gönderdiğinizde yanıtlarınız MAGIK Studio’ya iletilir.' : 'Bu sürümde gönderim sunucusu bağlı değil. Gönderdiğinizde yanıtlarınız bu cihazda saklanır ve bir sonraki ekranda bize iletmeniz için kopyalanabilir.') + '</p>' +
+        '<p class="agree-note">' + (CONFIG.submitEndpoint ? 'Formu gönderdiğinizde yanıtlarınız Studio Magik’e iletilir.' : 'Bu sürümde gönderim sunucusu bağlı değil. Gönderdiğinizde yanıtlarınız bu cihazda saklanır ve bir sonraki ekranda bize iletmeniz için kopyalanabilir.') + '</p>' +
         '<p class="form-msg" id="agree-msg" role="alert">' + (state.agreeError ? 'Göndermek için bu kutuyu işaretleyin.' : '') + '</p>' +
       '</div>';
   }
@@ -1348,7 +1348,7 @@ input[type="date"].input { max-width: 260px; min-height: 52px; }
   function answersText() {
     var ans = state.submission ? state.submission.answers : state.answers;
     var prev = state.answers; state.answers = ans;
-    var lines = ['MAGIK Studio · Web sitesi keşif formu', (ans.company || '') + (state.submission ? ' · ' + longDate(state.submission.submittedAt) : ''), ''];
+    var lines = ['Studio Magik · Web sitesi keşif formu', (ans.company || '') + (state.submission ? ' · ' + longDate(state.submission.submittedAt) : ''), ''];
     SECTIONS.forEach(function (s, i) {
       var qs = visibleQs(i).filter(answered);
       if (!qs.length) return;
